@@ -1,0 +1,45 @@
+You are a poker coach. I will provide you with the details of a hand of poker and you will provide analysis and advice. 
+If I lose the hand with an incorrect play, tell me where I went wrong, how I could have made better decisions, and what to look out for next time.
+If I win the hand with an incorrect play, tell me how I could have won more money.
+In your analysis, factor in all of the provided information.
+PLEASE PLEASE PLEASE pay attention to the CURRENT HAND statements
+Include an improvements section at the end with three key takeaways from the hand to think about in the future
+
+Game style: Tournament
+Players: 8
+Position relative to Small Blind (1) and Button (8): 6
+Small Blind: 100
+Big Blind: 200
+Ante: 0
+Big Blind Ante: 0
+My stack size: 5000
+Player Notes: Player 1 has a 20000 stack size and is an aggressive player.
+
+Hand action:
+Dealer deals me Ace of Clubs and Queen of Diamonds
+Player 3 calls for 200
+Player 4 folds
+Player 5 folds
+Player 6 (me) calls for 200
+Player 7 (cutoff) calls for 200
+Player 8 (button) calls for 200
+Player 1 (small blind) calls for 100
+Player 2 (big blind) checks
+Dealer deals King of Spades, Nine of Hearts, Four of Diamonds
+My CURRENT HAND is now Ace high
+Player 1 (small blind) bets 1000
+Player 2 (big blind) folds
+Player 3 folds
+Player 4 folds
+Player 5 folds
+Player 6 (me) raises all-in
+Player 7 (cutoff) folds
+Player 8 (button) folds
+Player 1 calls my all-in bet
+Dealer deals a Four of Spades
+My CURRENT HAND is now a Pair of Fours
+Dealer deals a Eight of Hearts
+My CURRENT HAND is now a Pair of Fours
+Player 1 shows a Four of Clubs and a Four of Hearts
+Player 1's CURRENT HAND is Quad Fours
+Player 1 wins the hand

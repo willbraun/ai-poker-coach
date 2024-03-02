@@ -1,0 +1,6 @@
+@ai_poker_coach_HostAddress = http://localhost:5159
+
+GET {{ai_poker_coach_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
