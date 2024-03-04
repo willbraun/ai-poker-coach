@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,8 +9,9 @@ namespace ai_poker_coach.Data
 {
     public class Hand
     {
-        [Key] public int HandId { get; set; }
-        public string Name { get; set; } = "";
+        [Key]
+        public int HandId { get; set; }
+        public string? Name { get; set; }
         public int GameStyle { get; set; }
         public int PlayerCount { get; set; }
         public int Position { get; set; }
@@ -18,16 +20,12 @@ namespace ai_poker_coach.Data
         public int Ante { get; set; }
         public int BigBlindAnte { get; set; }
         public int MyStack { get; set; }
-        public string PlayerNotes { get; set; } = "";
-        public string Winners { get; set; } = "";
-        public string Analysis {get; set; } = "";
-
-        private DateTime createdTime;
-        public DateTime CreatedTime
-        {
-            get { return createdTime; }
-            private set { createdTime = value; }
-        }
+        public string? PlayerNotes { get; set; }
+        public ICollection<Action>? Actions { get; set; }
+        public ICollection<Card>? Cards { get; set; }
+        public string? Winners { get; set; }
+        public string? Analysis { get; set; }
+        public DateTime CreatedTime { get; }
 
         public Hand()
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ai_poker_coach.Data
 {
-    public class Action : IHandStep
+    public class Card : IHandStep
     {
         [ForeignKey("Hand")]
         public int HandId { get; set; }
@@ -16,8 +16,8 @@ namespace ai_poker_coach.Data
         public int Player { get; set; }
 
         [Key]
-        public int ActionId { get; set; }
-        public int Decision { get; set; }
-        public int Bet { get; set; }
+        public int CardId { get; set; }
+        public string? Value { get; set; }
+        public string? Suit { get; set; }
     }
 }

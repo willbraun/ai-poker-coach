@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 
 namespace ai_poker_coach.Data
 {
-    public class Action : IHandStep
+    public interface IHandStep
     {
         [ForeignKey("Hand")]
         public int HandId { get; set; }
-        public Hand Hand { get; set; } = new();
+        public Hand Hand { get; set; }
         public int Step { get; set; }
         public int Player { get; set; }
-
-        [Key]
-        public int ActionId { get; set; }
-        public int Decision { get; set; }
-        public int Bet { get; set; }
     }
 }
