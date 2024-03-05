@@ -7,9 +7,9 @@ namespace DotNet8Authentication.Data
 {
     public class IdentityDataContext : IdentityDbContext<ApplicationUser>
     {
-        public IdentityDataContext(DbContextOptions<IdentityDataContext> options, IConfiguration configuration) : base(options)
+        public IdentityDataContext(DbContextOptions<IdentityDataContext> options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
