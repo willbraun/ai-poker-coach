@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace ai_poker_coach.Migrations.AppData
+namespace ai_poker_coach.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialApp : Migration
+    public partial class UserHandFK2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

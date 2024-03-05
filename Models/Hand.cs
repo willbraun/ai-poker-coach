@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ai_poker_coach.Data
+namespace ai_poker_coach.Models
 {
     public class Hand
     {
@@ -26,6 +26,10 @@ namespace ai_poker_coach.Data
         public string? Winners { get; set; }
         public string? Analysis { get; set; }
         public DateTime CreatedTime { get; }
+
+        [ForeignKey("ApplicationUser")]
+        public string? ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
 
         public Hand()
         {
