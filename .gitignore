@@ -484,6 +484,9 @@ $RECYCLE.BIN/
 *.swp
 
 # builds
+builds/
 *.zip
 
+# misc
+deploy.sh
 scratch.txt
