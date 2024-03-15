@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using DotNet8Authentication.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using DotNetEnv;
+using ai_poker_coach.Models;
 
 DotNetEnv.Env.Load();
 
@@ -17,7 +18,7 @@ builder.Services.AddDbContext<IdentityDataContext>(options =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<IdentityDataContext>();
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>().AddEntityFrameworkStores<IdentityDataContext>();
 
 var app = builder.Build();
 
@@ -27,7 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<ApplicationUser>();
 
 var summaries = new[]
 {
