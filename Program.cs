@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<IdentityDataContext>(options =>
 {
-    options.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_REMOTE"));
+    options.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION"));
 });
 
 builder.Services.AddAuthorization();
