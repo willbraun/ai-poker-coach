@@ -13,7 +13,8 @@ namespace ai_poker_coach.Models
         public int ActionId { get; set; }
         public int Decision { get; set; }
         public int Bet { get; set; }
-        
+        public int Pot { get; set; }
+
         [ForeignKey("Hand")]
         public int HandId { get; set; }
         public Hand Hand { get; set; } = new();
