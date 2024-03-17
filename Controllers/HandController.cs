@@ -57,18 +57,25 @@ namespace ai_poker_coach.Controllers
                 httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
                 httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
                 var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
-
+                
                 using Stream stream = await response.Content.ReadAsStreamAsync();
                 using StreamReader reader = new(stream);
-                // List<string> lines = [];
-
-                // once stream finishes, call GET messages API to get the completed message
-                // see if there is a better way than checking .endofstream
-
-                if (reader.EndOfStream)
+                string analysis = "";
+                while (!reader.EndOfStream)
                 {
- 
+                    string line = reader.ReadLine()!;
+                    
+
+                    Console.WriteLine(line);
+                    var json = JsonSerializer.Deserialize<IStreamDto>(line);
+                    Console.WriteLine(json);
+                    if (json is MessageDeltaDto messageDelta)
+                    {
+                        analysis += messageDelta.Data.Delta.Content[0].Text.Value;
+                    }
                 }
+
+                Console.WriteLine($"Analysis: {analysis}");
             
                 
 
@@ -77,7 +84,7 @@ namespace ai_poker_coach.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while posting data to https://api.openai.com/v1/threads : {ex.Message}");
+                return StatusCode(500, $"An error occurred while posting data to https://api.openai.com/v1/threads/runs : {ex.Message}, {ex.StackTrace}, {ex.Source}");
             }
 
             // return response
