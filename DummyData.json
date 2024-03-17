@@ -1,0 +1,161 @@
+{
+  "name": "Losing first cash game at Cherokee",
+  "gameStyle": 1,
+  "playerCount": 8,
+  "position": 4,
+  "smallBlind": 1,
+  "bigBlind": 3,
+  "ante": 0,
+  "bigBlindAnte": 0,
+  "myStack": 180,
+  "playerNotes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 8. Other players seem pretty conservative.",
+  "winners": "7",
+  "cards": [
+    {
+      "step": 1,
+      "player": 4,
+      "value": "K",
+      "suit": "D"
+    },
+    {
+      "step": 2,
+      "player": 4,
+      "value": "3",
+      "suit": "C"
+    },
+    {
+      "step": 11,
+      "player": 0,
+      "value": "K",
+      "suit": "D"
+    },
+    {
+      "step": 12,
+      "player": 0,
+      "value": "Q",
+      "suit": "H"
+    },
+    {
+      "step": 13,
+      "player": 0,
+      "value": "3",
+      "suit": "S"
+    },
+    {
+      "step": 18,
+      "player": 0,
+      "value": "8",
+      "suit": "S"
+    },
+    {
+      "step": 22,
+      "player": 0,
+      "value": "4",
+      "suit": "D"
+    },
+    {
+      "step": 23,
+      "player": 7,
+      "value": "Q",
+      "suit": "D"
+    },
+    {
+      "step": 24,
+      "player": 7,
+      "value": "Q",
+      "suit": "S"
+    }
+  ],
+  "actions": [
+    {
+      "step": 3,
+      "player": 3,
+      "decision": 3,
+      "bet": 15
+    },
+    {
+      "step": 4,
+      "player": 4,
+      "decision": 2,
+      "bet": 15
+    },
+    {
+      "step": 5,
+      "player": 5,
+      "decision": 0,
+      "bet": 0
+    },
+    {
+      "step": 6,
+      "player": 6,
+      "decision": 0,
+      "bet": 0
+    },
+    {
+      "step": 7,
+      "player": 7,
+      "decision": 2,
+      "bet": 15
+    },
+    {
+      "step": 8,
+      "player": 8,
+      "decision": 0,
+      "bet": 0
+    },
+    {
+      "step": 9,
+      "player": 1,
+      "decision": 0,
+      "bet": 0
+    },
+    {
+      "step": 10,
+      "player": 2,
+      "decision": 0,
+      "bet": 0
+    },
+    {
+      "step": 14,
+      "player": 3,
+      "decision": 1,
+      "bet": 0
+    },
+    {
+      "step": 15,
+      "player": 4,
+      "decision": 3,
+      "bet": 35
+    },
+    {
+      "step": 16,
+      "player": 7,
+      "decision": 2,
+      "bet": 35
+    },
+    {
+      "step": 17,
+      "player": 3,
+      "decision": 0,
+      "bet": 0
+    },
+    {
+      "step": 19,
+      "player": 4,
+      "decision": 1,
+      "bet": 0
+    },
+    {
+      "step": 20,
+      "player": 7,
+      "decision": 1,
+      "bet": 130
+    },
+    {
+      "step": 21,
+      "player": 4,
+      "decision": 2,
+      "bet": 130
+    }
+  ]
+}

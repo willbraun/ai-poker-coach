@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ai_poker_coach.Models
+namespace ai_poker_coach.Domain.Models
 {
-    public class Card : IHandStep
+    public class Action : IHandStep
     {
         [Key]
-        public int CardId { get; set; }
-        public string? Value { get; set; }
-        public string? Suit { get; set; }
+        public int ActionId { get; set; }
+        public int Decision { get; set; }
+        public int Bet { get; set; }
 
         [ForeignKey("Hand")]
         public int HandId { get; set; }

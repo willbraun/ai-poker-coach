@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ai_poker_coach.Models
+namespace ai_poker_coach.Domain.Models
 {
     public class Hand
     {

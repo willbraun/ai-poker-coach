@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using DotNet8Authentication.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using DotNetEnv;
-using ai_poker_coach.Models;
+using ai_poker_coach.Domain.Models;
 
 DotNetEnv.Env.Load();
 

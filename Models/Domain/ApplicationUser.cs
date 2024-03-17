@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace ai_poker_coach.Models
+namespace ai_poker_coach.Domain.Models
 {
     public class ApplicationUser : IdentityUser
     {
