@@ -22,6 +22,8 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>().AddEntityFrameworkSt
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
