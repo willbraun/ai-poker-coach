@@ -8,6 +8,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.VisualBasic;
 using System.Text.Json;
 using ai_poker_coach.Models.Output;
+using System.Text;
 
 namespace ai_poker_coach.Controllers
 {
@@ -30,9 +31,11 @@ namespace ai_poker_coach.Controllers
             // create prompt string from requestBody
             string message = "Give me some poker tips for playing pocket 8s";
 
-            var openaiBody = new {
+            var openaiBody = new
+            {
                 assistant_id = Environment.GetEnvironmentVariable("OPENAI_ASSISTANT_ID"),
-                thread = new {
+                thread = new
+                {
                     messages = new[] {
                         new {
                             role = "user",
@@ -48,48 +51,33 @@ namespace ai_poker_coach.Controllers
                 stream = true
             };
 
-            // var openaiBodyString = JsonSerializer.Serialize(openaiBody);
-
+            string analysis = "";
             try
             {
                 var httpClient = _httpClientFactory.CreateClient();
-                // httpClient.DefaultRequestHeaders.Add(HeaderNames.ContentType, "application/json");
                 httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
                 httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
                 var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
-                
+
                 using Stream stream = await response.Content.ReadAsStreamAsync();
-                using StreamReader reader = new(stream);
-                string analysis = "";
+                using StreamReader reader = new(stream, Encoding.UTF8);
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine()!;
-                    
-
-                    Console.WriteLine(line);
-                    var json = JsonSerializer.Deserialize<IStreamDto>(line);
-                    Console.WriteLine(json);
-                    if (json is MessageDeltaDto messageDelta)
+                    if (line.Contains("\"object\":\"thread.message\",") &&
+                        line.Contains("\"status\":\"completed\","))
                     {
-                        analysis += messageDelta.Data.Delta.Content[0].Text.Value;
+                        analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
+                        break;
                     }
                 }
-
-                Console.WriteLine($"Analysis: {analysis}");
-            
-                
-
-                // ThreadResponseDto data = JsonSerializer.Deserialize<ThreadResponseDto>(dataString)!;
-
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred while posting data to https://api.openai.com/v1/threads/runs : {ex.Message}, {ex.StackTrace}, {ex.Source}");
             }
 
-            // return response
-
-            return Ok("Successful - testing");
+            return Ok(analysis);
         }
     }
 }
