@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ai_poker_coach.Models.Input
 {
-    public class ActionInputDto
+    public class ActionInputDto : IHandStepInputDto
     {
         public int Step { get; set; }
         public int Player { get; set; }
