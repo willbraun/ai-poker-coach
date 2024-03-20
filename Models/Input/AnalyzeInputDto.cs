@@ -7,7 +7,7 @@ namespace ai_poker_coach.Models.Input
 {
     public class AnalyzeInputDto
     {
-        public string? Name { get; set; }
+        public string Name { get; set; } = "";
         public int GameStyle { get; set; }
         public int PlayerCount { get; set; }
         public int Position { get; set; }
@@ -16,9 +16,10 @@ namespace ai_poker_coach.Models.Input
         public int Ante { get; set; }
         public int BigBlindAnte { get; set; }
         public int MyStack { get; set; }
-        public string? PlayerNotes { get; set; }
-        public string? Winners { get; set; }
-        public ICollection<ActionInputDto>? Actions { get; set; }
-        public ICollection<CardInputDto>? Cards { get; set; }
+        public string PlayerNotes { get; set; } = "";
+        public string Winners { get; set; } = "";
+        public List<ActionInputDto> Actions { get; set; } = [];
+        public List<CardInputDto> Cards { get; set; } = [];
     }
+
 }

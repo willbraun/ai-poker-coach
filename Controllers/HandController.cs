@@ -8,7 +8,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.VisualBasic;
 using System.Text.Json;
 using System.Text;
-using static ai_poker_coach.Utils.Utils;
+using static ai_poker_coach.Utils.PromptUtils;
 
 namespace ai_poker_coach.Controllers
 {
