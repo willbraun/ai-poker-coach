@@ -1,4 +1,4 @@
-using ai_poker_coach.Domain.Models;
+using ai_poker_coach.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ai_poker_coach.Domain.Models
+namespace ai_poker_coach.Models.Domain
 {
     public class Action : IHandStep
     {

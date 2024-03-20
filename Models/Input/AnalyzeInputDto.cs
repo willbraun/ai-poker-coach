@@ -18,8 +18,25 @@ namespace ai_poker_coach.Models.Input
         public int MyStack { get; set; }
         public string PlayerNotes { get; set; } = "";
         public string Winners { get; set; } = "";
-        public List<ActionInputDto> Actions { get; set; } = [];
-        public List<CardInputDto> Cards { get; set; } = [];
+        public ActionGroupInputDto Actions { get; set; } = new();
+        public CardGroupInputDto Cards { get; set; } = new();
+    }
+
+    public class ActionGroupInputDto
+    {
+        public List<ActionInputDto> Preflop { get; set; } = [];
+        public List<ActionInputDto> Flop { get; set; } = [];
+        public List<ActionInputDto> Turn { get; set; } = [];
+        public List<ActionInputDto> River { get; set; } = [];
+    }
+
+    public class CardGroupInputDto
+    {
+        public List<CardInputDto> Hero { get; set; } = [];
+        public List<CardInputDto> Flop { get; set; } = [];
+        public List<CardInputDto> Turn { get; set; } = [];
+        public List<CardInputDto> River { get; set; } = [];
+        public List<CardInputDto> Villain { get; set; } = [];
     }
 
 }

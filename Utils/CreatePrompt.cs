@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ai_poker_coach.Domain.Models;
+using ai_poker_coach.Models.Domain;
 using ai_poker_coach.Models.Input;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
@@ -13,7 +13,6 @@ namespace ai_poker_coach.Utils
         public static string CreatePrompt(AnalyzeInputDto requestBody)
         {
             List<string> gameStyles = ["Cash Game", "Tournament"];
-            List<string> actions = ["folds", "checks", "calls", "bets"];
             Dictionary<string, string> values = new() {
                 {"2", "Two"},
                 {"3", "Three"},
@@ -52,71 +51,33 @@ namespace ai_poker_coach.Utils
 
             string message = TrimLeadingSpaces(initial);
 
-            List<IHandStepInputDto> steps = [.. requestBody.Actions, .. requestBody.Cards];
-            List<IHandStepInputDto> sortedSteps = [.. steps.OrderBy(step => step.Step)];
+            CardInputDto hero1 = requestBody.Cards.Hero[0];
+            CardInputDto hero2 = requestBody.Cards.Hero[1];
+            message += $"\nDealer deals me: {values[hero1.Value]} of {suits[hero1.Suit]} and {values[hero2.Value]} of {suits[hero2.Suit]}\n";
+            message += GetActionMessages(requestBody.Actions.Preflop);
 
-            int i = 0;
-
-            CardInputDto hole1 = (CardInputDto)sortedSteps[i];
-            CardInputDto hole2 = (CardInputDto)sortedSteps[i + 1];
-            message += $"\nDealer deals me: {values[hole1.Value]} of {suits[hole1.Suit]} and {values[hole2.Value]} of {suits[hole2.Suit]}\n";
-            i += 2;
-
-            while (sortedSteps[i] is ActionInputDto current)
-            {
-                string betMessage = current.Decision > 1 ? $" {current.Bet}." : ".";
-                message += $"Player {current.Player} {actions[current.Decision]}{betMessage}\n";
-                i++;
-            }
-
-            if (i >= steps.Count - 1) return message;
-
-            CardInputDto flop1 = (CardInputDto)sortedSteps[i];
-            CardInputDto flop2 = (CardInputDto)sortedSteps[i + 1];
-            CardInputDto flop3 = (CardInputDto)sortedSteps[i + 2];
+            if (requestBody.Cards.Flop.Count == 0) return message;
+            CardInputDto flop1 = requestBody.Cards.Flop[0];
+            CardInputDto flop2 = requestBody.Cards.Flop[1];
+            CardInputDto flop3 = requestBody.Cards.Flop[2];
             message += $"Dealer deals the flop: {values[flop1.Value]} of {suits[flop1.Suit]}, {values[flop2.Value]} of {suits[flop2.Suit]}, and {values[flop3.Value]} of {suits[flop3.Suit]}.\n";
-            i += 3;
+            message += GetActionMessages(requestBody.Actions.Flop);
 
-            while (sortedSteps[i] is ActionInputDto current)
-            {
-                string betMessage = current.Decision > 1 ? $" {current.Bet}." : ".";
-                message += $"Player {current.Player} {actions[current.Decision]}{betMessage}\n";
-                i++;
-            }
-
-            if (i >= steps.Count - 1) return message;
-
-            CardInputDto turn = (CardInputDto)sortedSteps[i];
+            if (requestBody.Cards.Turn.Count == 0) return message;
+            CardInputDto turn = requestBody.Cards.Turn[0];
             message += $"Dealer deals the turn: {values[turn.Value]} of {suits[turn.Suit]}.\n";
-            i++;
+            message += GetActionMessages(requestBody.Actions.Turn);
 
-            while (sortedSteps[i] is ActionInputDto current)
-            {
-                string betMessage = current.Decision > 1 ? $" {current.Bet}." : ".";
-                message += $"Player {current.Player} {actions[current.Decision]}{betMessage}\n";
-                i++;
-            }
-
-            if (i >= steps.Count - 1) return message;
-
-            CardInputDto river = (CardInputDto)sortedSteps[i];
+            if (requestBody.Cards.River.Count == 0) return message;
+            CardInputDto river = requestBody.Cards.River[0];
             message += $"Dealer deals the river: {values[river.Value]} of {suits[river.Suit]}.\n";
-            i++;
+            message += GetActionMessages(requestBody.Actions.River);
 
-            while (sortedSteps[i] is ActionInputDto current)
+            if (requestBody.Cards.Villain.Count == 0) return message;
+            for (int j = 0; j < requestBody.Cards.Villain.Count; j += 2)
             {
-                string betMessage = current.Decision > 1 ? $" {current.Bet}." : ".";
-                message += $"Player {current.Player} {actions[current.Decision]}{betMessage}\n";
-                i++;
-            }
-
-            if (i >= steps.Count - 1) return message;
-
-            var villainCards = sortedSteps.Skip(i).OrderBy(card => card.Player).ToList();
-            for (int j = 0; j < villainCards.Count; j += 2)
-            {
-                CardInputDto villian1 = (CardInputDto)villainCards[j];
-                CardInputDto villian2 = (CardInputDto)villainCards[j + 1];
+                CardInputDto villian1 = requestBody.Cards.Villain[j];
+                CardInputDto villian2 = requestBody.Cards.Villain[j + 1];
                 message += $"Player {villian1.Player} shows down: {values[villian1.Value]} of {suits[villian1.Suit]} and {values[villian2.Value]} of {suits[villian2.Suit]}\n";
             }
 
@@ -129,6 +90,20 @@ namespace ai_poker_coach.Utils
         {
             string[] lines = input.Trim().Split('\n');
             return string.Join(Environment.NewLine, lines.Select(line => line.TrimStart()));
+        }
+
+        static string GetActionMessages(List<ActionInputDto> actions)
+        {
+            List<string> decisions = ["folds", "checks", "calls", "bets"];
+
+            string addition = "";
+            foreach (var action in actions)
+            {
+                string betMessage = action.Decision > 1 ? $" {action.Bet}." : ".";
+                addition += $"Player {action.Player} {decisions[action.Decision]}{betMessage}\n";
+            }
+
+            return addition;
         }
     }
 }
