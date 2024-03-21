@@ -20,6 +20,7 @@ namespace ai_poker_coach.Models.Input
         public string Winners { get; set; } = "";
         public ActionGroupInputDto Actions { get; set; } = new();
         public CardGroupInputDto Cards { get; set; } = new();
+        public EvaluationInputDto Evaluations { get; set; } = new();
     }
 
     public class ActionGroupInputDto
@@ -32,11 +33,26 @@ namespace ai_poker_coach.Models.Input
 
     public class CardGroupInputDto
     {
-        public List<CardInputDto> Hero { get; set; } = [];
+        public List<CardInputDto> Preflop { get; set; } = [];
         public List<CardInputDto> Flop { get; set; } = [];
         public List<CardInputDto> Turn { get; set; } = [];
         public List<CardInputDto> River { get; set; } = [];
-        public List<CardInputDto> Villain { get; set; } = [];
+        public List<List<CardInputDto>> Villains { get; set; } = [[]];
+    }
+
+    public class EvaluationInputDto
+    {
+        public string Preflop { get; set; } = "";
+        public string Flop { get; set; } = "";
+        public string Turn { get; set; } = "";
+        public string River { get; set; } = "";
+        public List<VillainEvalDto> Villains { get; set; } = [];
+    }
+
+    public class VillainEvalDto
+    {
+        public int Player { get; set; }
+        public string Evaluation { get; set; } = "";
     }
 
 }

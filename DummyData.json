@@ -10,8 +10,20 @@
 	"myStack": 180,
 	"playerNotes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 8. Other players seem pretty conservative.",
 	"winners": "7",
+	"evaluations": {
+		"preflop": "King high",
+		"flop": "Two Pair, Kings and Threes",
+		"turn": "Two Pair, Kings and Threes",
+		"river": "Two Pair, Kings and Threes",
+		"villain": [
+			{
+				"player": 7,
+				"evaluation": "Three of a Kind, Queens"
+			}
+		]
+	},
 	"cards": {
-		"hero": [
+		"preflop": [
 			{
 				"step": 1,
 				"player": 4,
@@ -61,19 +73,21 @@
 				"suit": "D"
 			}
 		],
-		"villain": [
-			{
-				"step": 23,
-				"player": 7,
-				"value": "Q",
-				"suit": "D"
-			},
-			{
-				"step": 24,
-				"player": 7,
-				"value": "Q",
-				"suit": "S"
-			}
+		"villains": [
+			[
+				{
+					"step": 23,
+					"player": 7,
+					"value": "Q",
+					"suit": "D"
+				},
+				{
+					"step": 24,
+					"player": 7,
+					"value": "Q",
+					"suit": "S"
+				}
+			]
 		]
 	},
 	"actions": {
