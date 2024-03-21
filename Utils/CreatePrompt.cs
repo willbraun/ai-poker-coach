@@ -13,6 +13,7 @@ namespace ai_poker_coach.Utils
         public static string CreatePrompt(AnalyzeInputDto requestBody)
         {
             List<string> gameStyles = ["Cash Game", "Tournament"];
+            List<string> deals = ["me", "the flop", "the turn", "the river"];
 
             string initial = $@"
             Game style: {gameStyles[requestBody.GameStyle]}
@@ -28,37 +29,23 @@ namespace ai_poker_coach.Utils
             
             Hand Action:";
 
-            string message = TrimLeadingSpaces(initial);
+            string message = TrimLeadingSpaces(initial) + "\n";
 
-            message += $"\nDealer deals me: {ListCards(requestBody.Cards.Preflop)}\n";
-            message += $"My CURRENT HAND is now: {requestBody.Evaluations.Preflop}\n";
-            message += GetActionMessages(requestBody.Actions.Preflop);
-
-            if (requestBody.Cards.Flop.Count == 0) return message;
-            message += $"Dealer deals the flop: {ListCards(requestBody.Cards.Flop)}.\n";
-            message += $"My CURRENT HAND is now: {requestBody.Evaluations.Flop}\n";
-            message += GetActionMessages(requestBody.Actions.Flop);
-
-            if (requestBody.Cards.Turn.Count == 0) return message;
-            message += $"Dealer deals the turn: {ListCards(requestBody.Cards.Turn)}.\n";
-            message += $"My CURRENT HAND is now: {requestBody.Evaluations.Turn}\n";
-            message += GetActionMessages(requestBody.Actions.Turn);
-
-            if (requestBody.Cards.River.Count == 0) return message;
-            message += $"Dealer deals the river: {ListCards(requestBody.Cards.River)}.\n";
-            message += $"My CURRENT HAND is now: {requestBody.Evaluations.River}\n";
-            message += GetActionMessages(requestBody.Actions.River);
-
-            if (requestBody.Cards.Villains.Count == 0) return message;
-            foreach (var card in requestBody.Cards.Villains)
+            for (int i = 0; i < requestBody.Rounds.Count; i++)
             {
-                CardInputDto villain1 = card[0];
-                CardInputDto villain2 = card[1];
-                message += $"Player {villain1.Player} shows down: {ListCards([villain1, villain2])}\n";
-                message += $"Player {villain1.Player}'s CURRENT HAND is: {requestBody.Evaluations.Villains.Find(vilEval => vilEval.Player == villain1.Player)?.Evaluation ?? ""}\n";
+                if (requestBody.Rounds[i].Cards.Count == 0) break;
+                message += $"Dealer deals {deals[i]}: {ListCards(requestBody.Rounds[i].Cards)}\n";
+                message += $"My CURRENT HAND is now: {requestBody.Rounds[i].Evaluation.Value}\n";
+                message += GetActionMessages(requestBody.Rounds[i].Actions, requestBody.Position);
             }
 
-            message += $"Hand winners: {string.Join(", ", requestBody.Winners.Split(",").Select(winner => $"Player {winner}"))}";
+            foreach (var villain in requestBody.Villains)
+            {
+                message += $"Player {villain.Cards[0].Player} shows down: {ListCards([villain.Cards[0], villain.Cards[1]])}\n";
+                message += $"Player {villain.Cards[0].Player}'s CURRENT HAND is: {villain.Evaluation.Value}\n";
+            }
+
+            message += "Hand winners: " + string.Join(", ", requestBody.Winners.Split(",").Select(winner => "Player " + winner + (winner == requestBody.Position.ToString() ? " (me)" : "" )));
 
             return message;
         }
@@ -96,15 +83,15 @@ namespace ai_poker_coach.Utils
             return string.Join(", ", cards.Select(card => $"{values[card.Value]} of {suits[card.Suit]}"));
         }
 
-        static string GetActionMessages(List<ActionInputDto> actions)
+        static string GetActionMessages(List<ActionInputDto> actions, int myPosition)
         {
-            List<string> decisions = ["folds", "checks", "calls", "bets"];
+            List<string> decisions = ["folds", "checks", "calls", "bets", "bets all-in for", "calls all-in for"];
 
             string addition = "";
             foreach (var action in actions)
             {
-                string betMessage = action.Decision > 1 ? $" {action.Bet}." : ".";
-                addition += $"Player {action.Player} {decisions[action.Decision]}{betMessage}\n";
+                string betSize = action.Decision > 1 ? $" {action.Bet}." : ".";
+                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision]}{betSize}\n";
             }
 
             return addition;

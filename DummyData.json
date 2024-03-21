@@ -8,185 +8,206 @@
 	"ante": 0,
 	"bigBlindAnte": 0,
 	"myStack": 180,
-	"playerNotes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 8. Other players seem pretty conservative.",
+	"playerNotes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 7. Other players seem pretty conservative.",
 	"winners": "7",
-	"evaluations": {
-		"preflop": "King high",
-		"flop": "Two Pair, Kings and Threes",
-		"turn": "Two Pair, Kings and Threes",
-		"river": "Two Pair, Kings and Threes",
-		"villain": [
-			{
-				"player": 7,
-				"evaluation": "Three of a Kind, Queens"
-			}
-		]
-	},
-	"cards": {
-		"preflop": [
-			{
-				"step": 1,
+	"rounds": [
+		{
+			"cards": [
+				{
+					"step": 1,
+					"player": 4,
+					"value": "K",
+					"suit": "D"
+				},
+				{
+					"step": 2,
+					"player": 4,
+					"value": "3",
+					"suit": "C"
+				}
+			],
+			"evaluation": {
+				"step": 3,
 				"player": 4,
-				"value": "K",
-				"suit": "D"
+				"value": "King high"
 			},
-			{
-				"step": 2,
+			"actions": [
+				{
+					"step": 4,
+					"player": 3,
+					"decision": 3,
+					"bet": 15
+				},
+				{
+					"step": 5,
+					"player": 4,
+					"decision": 2,
+					"bet": 15
+				},
+				{
+					"step": 6,
+					"player": 5,
+					"decision": 0,
+					"bet": 0
+				},
+				{
+					"step": 7,
+					"player": 6,
+					"decision": 0,
+					"bet": 0
+				},
+				{
+					"step": 8,
+					"player": 7,
+					"decision": 2,
+					"bet": 15
+				},
+				{
+					"step": 9,
+					"player": 8,
+					"decision": 0,
+					"bet": 0
+				},
+				{
+					"step": 10,
+					"player": 1,
+					"decision": 0,
+					"bet": 0
+				},
+				{
+					"step": 11,
+					"player": 2,
+					"decision": 0,
+					"bet": 0
+				}
+			]
+		},
+		{
+			"cards": [
+				{
+					"step": 12,
+					"player": 0,
+					"value": "K",
+					"suit": "D"
+				},
+				{
+					"step": 13,
+					"player": 0,
+					"value": "Q",
+					"suit": "H"
+				},
+				{
+					"step": 14,
+					"player": 0,
+					"value": "3",
+					"suit": "S"
+				}
+			],
+			"evaluation": {
+				"step": 15,
 				"player": 4,
-				"value": "3",
-				"suit": "C"
-			}
-		],
-		"flop": [
-			{
-				"step": 11,
-				"player": 0,
-				"value": "K",
-				"suit": "D"
+				"value": "Two Pair, Kings and Threes"
 			},
-			{
-				"step": 12,
-				"player": 0,
-				"value": "Q",
-				"suit": "H"
+			"actions": [
+				{
+					"step": 16,
+					"player": 3,
+					"decision": 1,
+					"bet": 0
+				},
+				{
+					"step": 17,
+					"player": 4,
+					"decision": 3,
+					"bet": 35
+				},
+				{
+					"step": 18,
+					"player": 7,
+					"decision": 2,
+					"bet": 35
+				},
+				{
+					"step": 19,
+					"player": 3,
+					"decision": 0,
+					"bet": 0
+				}
+			]
+		},
+		{
+			"cards": [
+				{
+					"step": 20,
+					"player": 0,
+					"value": "8",
+					"suit": "S"
+				}
+			],
+			"evaluation": {
+				"step": 21,
+				"player": 4,
+				"value": "Two Pair, Kings and Threes"
 			},
-			{
-				"step": 13,
-				"player": 0,
-				"value": "3",
-				"suit": "S"
-			}
-		],
-		"turn": [
-			{
-				"step": 18,
-				"player": 0,
-				"value": "8",
-				"suit": "S"
-			}
-		],
-		"river": [
-			{
-				"step": 22,
-				"player": 0,
-				"value": "4",
-				"suit": "D"
-			}
-		],
-		"villains": [
-			[
+			"actions": [
+				{
+					"step": 22,
+					"player": 4,
+					"decision": 1,
+					"bet": 0
+				},
 				{
 					"step": 23,
+					"player": 7,
+					"decision": 4,
+					"bet": 130
+				},
+				{
+					"step": 24,
+					"player": 4,
+					"decision": 5,
+					"bet": 130
+				}
+			]
+		},
+		{
+			"cards": [
+				{
+					"step": 25,
+					"player": 0,
+					"value": "4",
+					"suit": "D"
+				}
+			],
+			"evaluation": {
+				"step": 26,
+				"player": 4,
+				"value": "Two Pair, Kings and Threes"
+			},
+			"actions": []
+		}
+	],
+	"villains": [
+		{
+			"cards": [
+				{
+					"step": 27,
 					"player": 7,
 					"value": "Q",
 					"suit": "D"
 				},
 				{
-					"step": 24,
+					"step": 28,
 					"player": 7,
 					"value": "Q",
 					"suit": "S"
 				}
-			]
-		]
-	},
-	"actions": {
-		"preflop": [
-			{
-				"step": 3,
-				"player": 3,
-				"decision": 3,
-				"bet": 15
-			},
-			{
-				"step": 4,
+			],
+			"evaluation": {
+				"step": 29,
 				"player": 4,
-				"decision": 2,
-				"bet": 15
-			},
-			{
-				"step": 5,
-				"player": 5,
-				"decision": 0,
-				"bet": 0
-			},
-			{
-				"step": 6,
-				"player": 6,
-				"decision": 0,
-				"bet": 0
-			},
-			{
-				"step": 7,
-				"player": 7,
-				"decision": 2,
-				"bet": 15
-			},
-			{
-				"step": 8,
-				"player": 8,
-				"decision": 0,
-				"bet": 0
-			},
-			{
-				"step": 9,
-				"player": 1,
-				"decision": 0,
-				"bet": 0
-			},
-			{
-				"step": 10,
-				"player": 2,
-				"decision": 0,
-				"bet": 0
+				"value": "Three of a Kind, Queens"
 			}
-		],
-		"flop": [
-			{
-				"step": 14,
-				"player": 3,
-				"decision": 1,
-				"bet": 0
-			},
-			{
-				"step": 15,
-				"player": 4,
-				"decision": 3,
-				"bet": 35
-			},
-			{
-				"step": 16,
-				"player": 7,
-				"decision": 2,
-				"bet": 35
-			},
-			{
-				"step": 17,
-				"player": 3,
-				"decision": 0,
-				"bet": 0
-			}
-		],
-		"turn": [
-			{
-				"step": 19,
-				"player": 4,
-				"decision": 1,
-				"bet": 0
-			},
-			{
-				"step": 20,
-				"player": 7,
-				"decision": 3,
-				"bet": 130
-			},
-			{
-				"step": 21,
-				"player": 4,
-				"decision": 2,
-				"bet": 130
-			}
-		],
-		"river": []
-	}
+		}
+	]
 }

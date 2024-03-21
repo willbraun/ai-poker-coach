@@ -18,41 +18,20 @@ namespace ai_poker_coach.Models.Input
         public int MyStack { get; set; }
         public string PlayerNotes { get; set; } = "";
         public string Winners { get; set; } = "";
-        public ActionGroupInputDto Actions { get; set; } = new();
-        public CardGroupInputDto Cards { get; set; } = new();
-        public EvaluationInputDto Evaluations { get; set; } = new();
+        public List<RoundInputDto> Rounds { get; set; } = [];
+        public List<VillainInputDto> Villains { get; set; } = [];
     }
 
-    public class ActionGroupInputDto
+    public class RoundInputDto
     {
-        public List<ActionInputDto> Preflop { get; set; } = [];
-        public List<ActionInputDto> Flop { get; set; } = [];
-        public List<ActionInputDto> Turn { get; set; } = [];
-        public List<ActionInputDto> River { get; set; } = [];
+        public List<CardInputDto> Cards { get; set; } = [];
+        public EvaluationInputDto Evaluation { get; set; } = new();
+        public List<ActionInputDto> Actions { get; set; } = [];
     }
 
-    public class CardGroupInputDto
+    public class VillainInputDto
     {
-        public List<CardInputDto> Preflop { get; set; } = [];
-        public List<CardInputDto> Flop { get; set; } = [];
-        public List<CardInputDto> Turn { get; set; } = [];
-        public List<CardInputDto> River { get; set; } = [];
-        public List<List<CardInputDto>> Villains { get; set; } = [[]];
+        public List<CardInputDto> Cards { get; set; } = [];
+        public EvaluationInputDto Evaluation { get; set; } = new();
     }
-
-    public class EvaluationInputDto
-    {
-        public string Preflop { get; set; } = "";
-        public string Flop { get; set; } = "";
-        public string Turn { get; set; } = "";
-        public string River { get; set; } = "";
-        public List<VillainEvalDto> Villains { get; set; } = [];
-    }
-
-    public class VillainEvalDto
-    {
-        public int Player { get; set; }
-        public string Evaluation { get; set; } = "";
-    }
-
 }
