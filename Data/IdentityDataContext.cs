@@ -35,6 +35,12 @@ namespace DotNet8Authentication.Data
                 .WithOne(e => e.Hand)
                 .HasForeignKey(e => e.HandId)
                 .IsRequired();
+
+            modelBuilder.Entity<Hand>()
+                .HasMany(e => e.Evaluations)
+                .WithOne(e => e.Hand)
+                .HasForeignKey(e => e.HandId)
+                .IsRequired();
         }
     }
 }
