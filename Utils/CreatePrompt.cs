@@ -16,7 +16,7 @@ namespace ai_poker_coach.Utils
             List<string> deals = ["me", "the flop", "the turn", "the river"];
 
             string initial = $@"
-            Game style: {gameStyles[requestBody.GameStyle]}
+            Game style: {gameStyles[requestBody.GameStyle ?? 0]}
             Players: {requestBody.PlayerCount}
             Position relative to Small Blind (1) and Button({requestBody.PlayerCount}): {requestBody.Position}
             Small Blind: {requestBody.SmallBlind}
@@ -31,12 +31,12 @@ namespace ai_poker_coach.Utils
 
             string message = TrimLeadingSpaces(initial) + "\n";
 
-            for (int i = 0; i < requestBody.Rounds.Count; i++)
+            for (int i = 0; i < requestBody.Rounds!.Count; i++)
             {
                 if (requestBody.Rounds[i].Cards.Count == 0) break;
                 message += $"Dealer deals {deals[i]}: {ListCards(requestBody.Rounds[i].Cards)}\n";
                 message += $"My CURRENT HAND is now: {requestBody.Rounds[i].Evaluation.Value}\n";
-                message += GetActionMessages(requestBody.Rounds[i].Actions, requestBody.Position);
+                message += GetActionMessages(requestBody.Rounds[i].Actions, requestBody.Position ?? 0);
             }
 
             foreach (var villain in requestBody.Villains)
@@ -45,7 +45,7 @@ namespace ai_poker_coach.Utils
                 message += $"Player {villain.Cards[0].Player}'s CURRENT HAND is: {villain.Evaluation.Value}\n";
             }
 
-            message += "Hand winners: " + string.Join(", ", requestBody.Winners.Split(",").Select(winner => "Player " + winner + (winner == requestBody.Position.ToString() ? " (me)" : "" )));
+            message += "Hand winners: " + string.Join(", ", requestBody.Winners!.Split(",").Select(winner => "Player " + winner + (winner == requestBody.Position.ToString() ? " (me)" : "")));
 
             return message;
         }
@@ -56,7 +56,7 @@ namespace ai_poker_coach.Utils
             return string.Join(Environment.NewLine, lines.Select(line => line.TrimStart()));
         }
 
-        static string ListCards(List<CardInputDto> cards)
+        public static string ListCards(List<CardInputDto> cards)
         {
             Dictionary<string, string> values = new() {
                 {"2", "Two"},
@@ -80,7 +80,7 @@ namespace ai_poker_coach.Utils
                 {"S", "Spades"},
             };
 
-            return string.Join(", ", cards.Select(card => $"{values[card.Value]} of {suits[card.Suit]}"));
+            return string.Join(", ", cards.Select(card => $"{values[card.Value!]} of {suits[card.Suit!]}"));
         }
 
         static string GetActionMessages(List<ActionInputDto> actions, int myPosition)
@@ -91,7 +91,7 @@ namespace ai_poker_coach.Utils
             foreach (var action in actions)
             {
                 string betSize = action.Decision > 1 ? $" {action.Bet}." : ".";
-                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision]}{betSize}\n";
+                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}\n";
             }
 
             return addition;

@@ -9,6 +9,7 @@ using Microsoft.VisualBasic;
 using System.Text.Json;
 using System.Text;
 using static ai_poker_coach.Utils.PromptUtils;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ai_poker_coach.Controllers
 {
@@ -28,6 +29,11 @@ namespace ai_poker_coach.Controllers
         [HttpPost("analyze")]
         public async Task<IActionResult> Analyze([FromBody] AnalyzeInputDto requestBody)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             string prompt = CreatePrompt(requestBody);
 
             var openaiBody = new

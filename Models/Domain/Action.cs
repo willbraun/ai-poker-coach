@@ -12,7 +12,7 @@ namespace ai_poker_coach.Models.Domain
         [Key]
         public int ActionId { get; set; }
         public int Decision { get; set; }
-        public int Bet { get; set; }
+        public decimal Bet { get; set; }
 
         [ForeignKey("Hand")]
         public int HandId { get; set; }

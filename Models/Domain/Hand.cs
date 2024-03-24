@@ -15,11 +15,11 @@ namespace ai_poker_coach.Models.Domain
         public int GameStyle { get; set; }
         public int PlayerCount { get; set; }
         public int Position { get; set; }
-        public int SmallBlind { get; set; }
-        public int BigBlind { get; set; }
-        public int Ante { get; set; }
-        public int BigBlindAnte { get; set; }
-        public int MyStack { get; set; }
+        public decimal SmallBlind { get; set; }
+        public decimal BigBlind { get; set; }
+        public decimal Ante { get; set; }
+        public decimal BigBlindAnte { get; set; }
+        public decimal MyStack { get; set; }
         public string PlayerNotes { get; set; } = "";
         public ICollection<Action> Actions { get; set; } = [];
         public ICollection<Card> Cards { get; set; } = [];
