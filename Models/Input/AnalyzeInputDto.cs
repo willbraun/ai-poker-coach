@@ -17,7 +17,7 @@ namespace ai_poker_coach.Models.Input
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Player count must be a positive integer.")]
         public int? PlayerCount { get; set; }
-       
+
         [Required]
         public int? Position { get; set; }
 
@@ -76,7 +76,7 @@ namespace ai_poker_coach.Models.Input
             {
                 yield return new ValidationResult($"There must be 1 card in the third round (turn). Provided: {Rounds[2].Cards.Count}.", [nameof(Rounds)]);
             }
-            
+
             if (Rounds[3].Cards.Count != 1)
             {
                 yield return new ValidationResult($"There must be 1 card in the fourth round (river). Provided: {Rounds[3].Cards.Count}.", [nameof(Rounds)]);
@@ -85,7 +85,7 @@ namespace ai_poker_coach.Models.Input
             List<IHandStepInputDto> steps = [];
             foreach (var round in Rounds)
             {
-                steps = [..steps, ..round.Cards, round.Evaluation, ..round.Actions];
+                steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions];
             }
 
             foreach (var villain in Villains)
@@ -95,7 +95,7 @@ namespace ai_poker_coach.Models.Input
                     yield return new ValidationResult($"Player {villain.Cards[0].Player} must have 2 cards. Provided: {villain.Cards.Count}.", [nameof(Villains)]);
                 }
 
-                steps = [..steps, ..villain.Cards, villain.Evaluation];
+                steps = [.. steps, .. villain.Cards, villain.Evaluation];
             }
 
             if (steps[0].Step != 1)
@@ -104,6 +104,7 @@ namespace ai_poker_coach.Models.Input
             }
 
             int current = 0;
+            int playerMin;
             foreach (var step in steps)
             {
                 List<ValidationResult> validationResults = [];
@@ -114,6 +115,20 @@ namespace ai_poker_coach.Models.Input
                     {
                         yield return new ValidationResult(validationResult.ErrorMessage, [nameof(step)]);
                     }
+                }
+
+                if (step is CardInputDto)
+                {
+                    playerMin = 0;
+                }
+                else
+                {
+                    playerMin = 1;
+                }
+
+                if (step.Player < playerMin || step.Player > PlayerCount)
+                {
+                    yield return new ValidationResult($"Player value of {step.Player} at step {step.Step} is invalid. Must be in range {playerMin}-{PlayerCount}.", [nameof(step)]);
                 }
 
                 if (step.Step - current != 1)
