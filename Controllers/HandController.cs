@@ -64,6 +64,8 @@ namespace ai_poker_coach.Controllers
                 httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
                 var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
 
+                response.EnsureSuccessStatusCode();
+
                 using Stream stream = await response.Content.ReadAsStreamAsync();
                 using StreamReader reader = new(stream, Encoding.UTF8);
                 while (!reader.EndOfStream)
@@ -79,8 +81,10 @@ namespace ai_poker_coach.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while posting data to https://api.openai.com/v1/threads/runs : {ex.Message}, {ex.StackTrace}, {ex.Source}");
+                return StatusCode(500, $"An error occurred while posting data to OpenAI : {ex.Message}, {ex.StackTrace}, {ex.Source}");
             }
+
+            Console.WriteLine($"ANALYSIS - {analysis}");
 
             return Ok(analysis);
         }

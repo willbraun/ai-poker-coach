@@ -5,16 +5,23 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using DotNetEnv;
 using ai_poker_coach.Models.Domain;
 
-DotNetEnv.Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsDevelopment())
+{
+    DotNetEnv.Env.Load();
+}
+else if (builder.Environment.IsProduction())
+{
+    DotNetEnv.Env.Load("/home/will/ai-poker-coach/.env");
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<IdentityDataContext>(options =>
 {
-    options.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_REMOTE"));
+    options.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION"));
 });
 
 builder.Services.AddAuthorization();
