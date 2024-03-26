@@ -81,10 +81,8 @@ namespace ai_poker_coach.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while posting data to OpenAI : {ex.Message}, {ex.StackTrace}, {ex.Source}");
+                return StatusCode(500, $"An error occurred while analyzing data: {ex.Message}");
             }
-
-            Console.WriteLine($"ANALYSIS - {analysis}");
 
             return Ok(analysis);
         }
