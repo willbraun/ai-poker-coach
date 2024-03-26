@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ai_poker_coach.Models.Domain;
-using ai_poker_coach.Models.Input;
+using ai_poker_coach.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace ai_poker_coach.Utils
 {
     public class PromptUtils
     {
-        public static string CreatePrompt(AnalyzeInputDto requestBody)
+        public static string CreatePrompt(HandStepsDto requestBody)
         {
             List<string> gameStyles = ["Cash Game", "Tournament"];
             List<string> deals = ["me", "the flop", "the turn", "the river"];
@@ -56,7 +56,7 @@ namespace ai_poker_coach.Utils
             return string.Join(Environment.NewLine, lines.Select(line => line.TrimStart()));
         }
 
-        public static string ListCards(List<CardInputDto> cards)
+        public static string ListCards(List<CardDto> cards)
         {
             Dictionary<string, string> values = new() {
                 {"2", "Two"},
@@ -83,7 +83,7 @@ namespace ai_poker_coach.Utils
             return string.Join(", ", cards.Select(card => $"{values[card.Value!]} of {suits[card.Suit!]}"));
         }
 
-        static string GetActionMessages(List<ActionInputDto> actions, int myPosition)
+        static string GetActionMessages(List<ActionDto> actions, int myPosition)
         {
             List<string> decisions = ["folds", "checks", "calls", "bets", "bets all-in for", "calls all-in for"];
 

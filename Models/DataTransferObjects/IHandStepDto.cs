@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ai_poker_coach.Models.Input
+namespace ai_poker_coach.Models.DataTransferObjects
 {
-    public interface IHandStepInputDto
+    public interface IHandStepDto
     {
         [Required]
         public int? Step { get; set; }

@@ -1,0 +1,66 @@
+[
+  {
+    "name": "CardDto - GET/POST"
+	},
+	{
+    "step": 1,
+		"player": 4,
+		"value": "K",
+		"suit": "D"
+	},
+
+  {
+    "name": "EvaluationDto - GET/POST"
+  },
+  {
+    "step": 3,
+    "player": 4,
+    "value": "King high"
+  },
+
+	{
+		"name": "ActionDto - POST"
+	},
+	{
+		"step": 5,
+		"player": 4,
+		"decision": 2,
+		"bet": 15
+	},
+
+	{
+		"name": "GetActionDto - GET"
+	},
+	{
+		"step": 5,
+		"player": 4,
+		"decision": 2,
+		"bet": 15,
+		"pot": 100
+	},
+
+	{
+		"name": "GetHandStepsDto - GET"
+	},
+	{
+		"samestuffasHandStepsDto": {},
+    "rounds_use_GetActionDto": [],
+    "villains": []
+	},
+
+	{
+		"name": "HandDto - POST"
+	},
+	{
+		"HandStepsDto": {},
+		"analysis": "some text"
+	},
+
+	{
+		"name": "GetHandDto - GET"
+	},
+	{
+		"GetHandStepsDto": {},
+		"analysis": "some text"
+	}
+]

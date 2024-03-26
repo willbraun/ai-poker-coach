@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ai_poker_coach.Models.Input;
+using ai_poker_coach.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using Microsoft.VisualBasic;
@@ -27,7 +27,7 @@ namespace ai_poker_coach.Controllers
         }
 
         [HttpPost("analyze")]
-        public async Task<IActionResult> Analyze([FromBody] AnalyzeInputDto requestBody)
+        public async Task<IActionResult> Analyze([FromBody] HandStepsDto requestBody)
         {
             if (!ModelState.IsValid)
             {

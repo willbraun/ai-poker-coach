@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ai_poker_coach.Models.Input
+namespace ai_poker_coach.Models.DataTransferObjects
 {
-    public class AnalyzeInputDto : IValidatableObject
+    public class HandStepsDto : IValidatableObject
     {
         public string Name { get; set; } = "";
 
@@ -46,9 +46,9 @@ namespace ai_poker_coach.Models.Input
         public string? Winners { get; set; }
 
         [Required]
-        public List<RoundInputDto>? Rounds { get; set; }
+        public List<RoundDto>? Rounds { get; set; }
 
-        public List<VillainInputDto> Villains { get; set; } = [];
+        public List<VillainDto> Villains { get; set; } = [];
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -82,7 +82,7 @@ namespace ai_poker_coach.Models.Input
                 yield return new ValidationResult($"There must be 1 card in the fourth round (river). Provided: {Rounds[3].Cards.Count}.", [nameof(Rounds)]);
             }
 
-            List<IHandStepInputDto> steps = [];
+            List<IHandStepDto> steps = [];
             foreach (var round in Rounds)
             {
                 steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions];
@@ -117,7 +117,7 @@ namespace ai_poker_coach.Models.Input
                     }
                 }
 
-                if (step is CardInputDto)
+                if (step is CardDto)
                 {
                     playerMin = 0;
                 }
@@ -140,16 +140,16 @@ namespace ai_poker_coach.Models.Input
         }
     }
 
-    public class RoundInputDto
+    public class RoundDto
     {
-        public List<CardInputDto> Cards { get; set; } = [];
-        public EvaluationInputDto Evaluation { get; set; } = new();
-        public List<ActionInputDto> Actions { get; set; } = [];
+        public List<CardDto> Cards { get; set; } = [];
+        public EvaluationDto Evaluation { get; set; } = new();
+        public List<ActionDto> Actions { get; set; } = [];
     }
 
-    public class VillainInputDto
+    public class VillainDto
     {
-        public List<CardInputDto> Cards { get; set; } = [];
-        public EvaluationInputDto Evaluation { get; set; } = new();
+        public List<CardDto> Cards { get; set; } = [];
+        public EvaluationDto Evaluation { get; set; } = new();
     }
 }
