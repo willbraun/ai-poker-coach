@@ -10,10 +10,12 @@ using System.Text.Json;
 using System.Text;
 using static ai_poker_coach.Utils.PromptUtils;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using ai_poker_coach.Models.Domain;
+using Action = ai_poker_coach.Models.Domain.Action;
+using DotNet8Authentication.Data;
 
 namespace ai_poker_coach.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
     public class HandController : ControllerBase
@@ -21,20 +23,23 @@ namespace ai_poker_coach.Controllers
         private readonly IHttpClientFactory
         _httpClientFactory;
 
-        public HandController(IHttpClientFactory httpClientFactory)
+        private readonly IdentityDataContext _dbContext;
+
+        public HandController(IHttpClientFactory httpClientFactory, IdentityDataContext dbContext)
         {
             _httpClientFactory = httpClientFactory;
+            _dbContext = dbContext;
         }
 
         [HttpPost("analyze")]
-        public async Task<IActionResult> Analyze([FromBody] HandStepsDto requestBody)
+        public async Task<IActionResult> Analyze([FromBody] HandStepsDto body)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            string prompt = CreatePrompt(requestBody);
+            string prompt = CreatePrompt(body);
 
             var openaiBody = new
             {
@@ -85,6 +90,104 @@ namespace ai_poker_coach.Controllers
             }
 
             return Ok(analysis);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] HandDto body)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Id == body.ApplicationUserId);
+            if (user == null)
+            {
+                return NotFound($"User ID of {body.ApplicationUserId} does not exist.");
+            }
+
+            ICollection<Action> actions = [];
+            ICollection<Card> cards = [];
+            ICollection<Evaluation> evaluations = [];
+
+            foreach (var round in body.HandStepsDto!.Rounds!)
+            {
+                actions = [..actions, ..round.Actions.Select(actionDto => new Action {
+                    Step = actionDto.Step ?? 0,
+                    Player = actionDto.Player ?? 0,
+                    Decision = actionDto.Decision ?? 0,
+                    Bet = actionDto.Bet ?? 0,
+                })];
+
+                cards = [..cards, ..round.Cards.Select(cardDto => new Card {
+                    Step = cardDto.Step ?? 0,
+                    Player = cardDto.Player ?? 0,
+                    Value = cardDto.Value!,
+                    Suit = cardDto.Suit!,
+                })];
+
+                evaluations = [..evaluations, new Evaluation {
+                    Step = round.Evaluation.Step ?? 0,
+                    Player = round.Evaluation.Player ?? 0,
+                    Value = round.Evaluation.Value!
+                }];
+            }
+
+            foreach (var villain in body.HandStepsDto.Villains)
+            {
+                cards = [..cards, ..villain.Cards.Select(cardDto => new Card {
+                    Step = cardDto.Step ?? 0,
+                    Player = cardDto.Player ?? 0,
+                    Value = cardDto.Value!,
+                    Suit = cardDto.Suit!,
+                })];
+
+                evaluations = [..evaluations, new Evaluation {
+                    Step = villain.Evaluation.Step ?? 0,
+                    Player = villain.Evaluation.Player ?? 0,
+                    Value = villain.Evaluation.Value!
+                }];
+            }
+
+            Hand hand = new()
+            {
+                ApplicationUserId = body.ApplicationUserId,
+                Name = body.HandStepsDto!.Name,
+                GameStyle = body.HandStepsDto.GameStyle ?? 0,
+                PlayerCount = body.HandStepsDto.PlayerCount ?? 0,
+                Position = body.HandStepsDto.Position ?? 0,
+                SmallBlind = body.HandStepsDto.SmallBlind ?? 0,
+                BigBlind = body.HandStepsDto.BigBlind ?? 0,
+                Ante = body.HandStepsDto.Ante ?? 0,
+                BigBlindAnte = body.HandStepsDto.BigBlindAnte ?? 0,
+                MyStack = body.HandStepsDto.MyStack ?? 0,
+                PlayerNotes = body.HandStepsDto.PlayerNotes!,
+                Winners = body.HandStepsDto.Winners!,
+                Analysis = body.Analysis!,
+                Actions = actions,
+                Cards = cards,
+                Evaluations = evaluations
+            };
+
+            user.Hands.Add(hand);
+
+            try
+            {
+                int rowsAffected = await _dbContext.SaveChangesAsync();
+
+                if (rowsAffected > 0)
+                {
+                    return Ok("Successfully added hand");
+                }
+                else
+                {
+                    return BadRequest("Failed to add hand");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Database error occurred: {ex.Message}");
+            }
         }
     }
 }

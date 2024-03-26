@@ -30,10 +30,10 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public decimal? BigBlind { get; set; }
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Ante must be positive.")]
-        public decimal Ante { get; set; } = 0;
+        public decimal? Ante { get; set; }
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big Blind Ante must be positive.")]
-        public decimal BigBlindAnte { get; set; } = 0;
+        public decimal? BigBlindAnte { get; set; }
 
         [Required]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]

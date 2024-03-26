@@ -25,6 +25,11 @@ namespace ai_poker_coach.Models.DataTransferObjects
             {
                 yield return new ValidationResult(validationResult.ErrorMessage, [nameof(HandStepsDto)]);
             }
+
+            if (Analysis != null && Analysis.Length == 0)
+            {
+                yield return new ValidationResult("Analysis cannot be blank", [nameof(Analysis)]);
+            }
         }
     }
 }
