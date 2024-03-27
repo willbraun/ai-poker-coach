@@ -36,49 +36,57 @@
 					"step": 4,
 					"player": 3,
 					"decision": 3,
-					"bet": 15
+					"bet": 15,
+					"pot": 19
 				},
 				{
 					"step": 5,
 					"player": 4,
 					"decision": 2,
-					"bet": 15
+					"bet": 15,
+					"pot": 34
 				},
 				{
 					"step": 6,
 					"player": 5,
 					"decision": 0,
-					"bet": 0
+					"bet": 0,
+					"pot": 34
 				},
 				{
 					"step": 7,
 					"player": 6,
 					"decision": 0,
-					"bet": 0
+					"bet": 0,
+					"pot": 34
 				},
 				{
 					"step": 8,
 					"player": 7,
 					"decision": 2,
-					"bet": 15
+					"bet": 15,
+					"pot": 49
 				},
 				{
 					"step": 9,
 					"player": 8,
 					"decision": 0,
-					"bet": 0
+					"bet": 0,
+					"pot": 49
 				},
 				{
 					"step": 10,
 					"player": 1,
 					"decision": 0,
-					"bet": 0
+					"bet": 0,
+					"pot": 49
 				},
 				{
 					"step": 11,
 					"player": 2,
 					"decision": 0,
-					"bet": 0
+					"bet": 0,
+					"pot": 49
 				}
 			]
 		},
@@ -113,25 +121,29 @@
 					"step": 16,
 					"player": 3,
 					"decision": 1,
-					"bet": 0
+					"bet": 0,
+					"pot": 49
 				},
 				{
 					"step": 17,
 					"player": 4,
 					"decision": 3,
-					"bet": 35
+					"bet": 35,
+					"pot": 84
 				},
 				{
 					"step": 18,
 					"player": 7,
 					"decision": 2,
-					"bet": 35
+					"bet": 35,
+					"pot": 119
 				},
 				{
 					"step": 19,
 					"player": 3,
 					"decision": 0,
-					"bet": 0
+					"bet": 0,
+					"pot": 119
 				}
 			]
 		},
@@ -154,19 +166,22 @@
 					"step": 22,
 					"player": 4,
 					"decision": 1,
-					"bet": 0
+					"bet": 0,
+					"pot": 119
 				},
 				{
 					"step": 23,
 					"player": 7,
 					"decision": 4,
-					"bet": 130
+					"bet": 130,
+					"pot": 249
 				},
 				{
 					"step": 24,
 					"player": 4,
 					"decision": 5,
-					"bet": 130
+					"bet": 130,
+					"pot": 379
 				}
 			]
 		},

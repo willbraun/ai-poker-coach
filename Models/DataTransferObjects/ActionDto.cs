@@ -9,7 +9,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
     public class ActionDto : IHandStepDto
     {
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Step must be a positive integer.")]
         public int? Step { get; set; }
 
         [Required]
@@ -22,5 +21,9 @@ namespace ai_poker_coach.Models.DataTransferObjects
         [Required]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Bet must be positive.")]
         public decimal? Bet { get; set; }
+
+        [Required]
+        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Pot must be positive.")]
+        public decimal? Pot { get; set; }
     }
 }

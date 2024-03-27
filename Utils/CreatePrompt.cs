@@ -26,6 +26,8 @@ namespace ai_poker_coach.Utils
             My Stack: {body.MyStack}
             Player Notes: {body.PlayerNotes}
             Winners: {body.Winners}
+
+            Starting pot size after blinds and antes: {body.SmallBlind + body.BigBlind + (body.Ante * body.PlayerCount) + body.BigBlindAnte}
             
             Hand Action:";
 
@@ -90,8 +92,8 @@ namespace ai_poker_coach.Utils
             string addition = "";
             foreach (var action in actions)
             {
-                string betSize = action.Decision > 1 ? $" {action.Bet}." : ".";
-                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}\n";
+                string betSize = action.Decision > 1 ? $" {action.Bet}" : "";
+                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}. Pot is now {action.Pot}.\n";
             }
 
             return addition;

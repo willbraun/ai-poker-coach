@@ -30,10 +30,10 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public decimal? BigBlind { get; set; }
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Ante must be positive.")]
-        public decimal? Ante { get; set; }
+        public decimal? Ante { get; set; } = 0;
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big Blind Ante must be positive.")]
-        public decimal? BigBlindAnte { get; set; }
+        public decimal? BigBlindAnte { get; set; } = 0;
 
         [Required]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]
@@ -103,7 +103,8 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 yield return new ValidationResult($"Steps must start at 1. ", [nameof(Rounds)]);
             }
 
-            int current = 0;
+            int currentStep = 0;
+            var currentPot = SmallBlind + BigBlind + (Ante * PlayerCount) + BigBlindAnte;
             int playerMin;
             foreach (var step in steps)
             {
@@ -131,11 +132,20 @@ namespace ai_poker_coach.Models.DataTransferObjects
                     yield return new ValidationResult($"Player value of {step.Player} at step {step.Step} is invalid. Must be in range {playerMin}-{PlayerCount}.", [nameof(step)]);
                 }
 
-                if (step.Step - current != 1)
+                if (step.Step - currentStep != 1)
                 {
-                    yield return new ValidationResult($"Steps must increment by 1. Error at step: {step.Step}, expected {current + 1}. ", [nameof(Rounds)]);
+                    yield return new ValidationResult($"Steps must increment by 1. Error at step: {step.Step}, expected {currentStep + 1}. ", [nameof(Rounds)]);
                 }
-                current++;
+                currentStep++;
+
+                if (step is ActionDto action)
+                {
+                    currentPot += action.Bet;
+                    if (currentPot != action.Pot)
+                    {
+                        yield return new ValidationResult($"Invalid pot or bet size. Error at step: {step.Step}. Calculated current pot of {currentPot} plus bet of {action.Bet} is {currentPot + action.Bet}, which does not equal provided pot of {action.Pot}.", [nameof(Rounds)]);
+                    }
+                }
             }
         }
     }
