@@ -110,7 +110,7 @@ namespace ai_poker_coach.Controllers
             ICollection<Card> cards = [];
             ICollection<Evaluation> evaluations = [];
 
-            foreach (var round in body.HandStepsDto!.Rounds!)
+            foreach (var round in body.HandSteps!.Rounds!)
             {
                 actions = [..actions, ..round.Actions.Select(actionDto => new Action {
                     Step = actionDto.Step ?? 0,
@@ -133,7 +133,7 @@ namespace ai_poker_coach.Controllers
                 }];
             }
 
-            foreach (var villain in body.HandStepsDto.Villains)
+            foreach (var villain in body.HandSteps.Villains)
             {
                 cards = [..cards, ..villain.Cards.Select(cardDto => new Card {
                     Step = cardDto.Step ?? 0,
@@ -152,17 +152,17 @@ namespace ai_poker_coach.Controllers
             Hand hand = new()
             {
                 ApplicationUserId = body.ApplicationUserId,
-                Name = body.HandStepsDto!.Name,
-                GameStyle = body.HandStepsDto.GameStyle ?? 0,
-                PlayerCount = body.HandStepsDto.PlayerCount ?? 0,
-                Position = body.HandStepsDto.Position ?? 0,
-                SmallBlind = body.HandStepsDto.SmallBlind ?? 0,
-                BigBlind = body.HandStepsDto.BigBlind ?? 0,
-                Ante = body.HandStepsDto.Ante ?? 0,
-                BigBlindAnte = body.HandStepsDto.BigBlindAnte ?? 0,
-                MyStack = body.HandStepsDto.MyStack ?? 0,
-                PlayerNotes = body.HandStepsDto.PlayerNotes!,
-                Winners = body.HandStepsDto.Winners!,
+                Name = body.HandSteps!.Name,
+                GameStyle = body.HandSteps.GameStyle ?? 0,
+                PlayerCount = body.HandSteps.PlayerCount ?? 0,
+                Position = body.HandSteps.Position ?? 0,
+                SmallBlind = body.HandSteps.SmallBlind ?? 0,
+                BigBlind = body.HandSteps.BigBlind ?? 0,
+                Ante = body.HandSteps.Ante ?? 0,
+                BigBlindAnte = body.HandSteps.BigBlindAnte ?? 0,
+                MyStack = body.HandSteps.MyStack ?? 0,
+                PlayerNotes = body.HandSteps.PlayerNotes!,
+                Winners = body.HandSteps.Winners!,
                 Analysis = body.Analysis!,
                 Actions = actions,
                 Cards = cards,

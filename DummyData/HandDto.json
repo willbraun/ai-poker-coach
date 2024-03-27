@@ -1,6 +1,6 @@
 {
-  "applicationUserId": 123,
-  "handSteps": {
+	"applicationUserId": "e6955222-5f3e-4eff-afae-7a94c0b15067",
+	"handSteps": {
 		"name": "Losing first cash game at Cherokee",
 		"gameStyle": 1,
 		"playerCount": 8,
@@ -213,5 +213,5 @@
 			}
 		]
 	},
-  "analysis": "This is a test analysis."
+	"analysis": "This is a test analysis."
 }

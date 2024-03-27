@@ -13,22 +13,17 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public string? ApplicationUserId { get; set; }
 
         [Required]
-        public HandStepsDto? HandStepsDto { get; set; }
+        public HandStepsDto? HandSteps { get; set; }
 
         [Required]
         public string? Analysis { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var validationResults = HandStepsDto!.Validate(new ValidationContext(HandStepsDto)).ToList();
+            var validationResults = HandSteps!.Validate(new ValidationContext(HandSteps)).ToList();
             foreach (var validationResult in validationResults)
             {
-                yield return new ValidationResult(validationResult.ErrorMessage, [nameof(HandStepsDto)]);
-            }
-
-            if (Analysis != null && Analysis.Length == 0)
-            {
-                yield return new ValidationResult("Analysis cannot be blank", [nameof(Analysis)]);
+                yield return new ValidationResult(validationResult.ErrorMessage, [nameof(validationResult.GetType)]);
             }
         }
     }
