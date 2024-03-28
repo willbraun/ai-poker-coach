@@ -104,7 +104,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
             }
 
             int currentStep = 0;
-            var currentPot = SmallBlind + BigBlind + (Ante * PlayerCount) + BigBlindAnte;
             int playerMin;
             foreach (var step in steps)
             {
@@ -137,15 +136,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
                     yield return new ValidationResult($"Steps must increment by 1. Error at step: {step.Step}, expected {currentStep + 1}. ", [nameof(Rounds)]);
                 }
                 currentStep++;
-
-                if (step is ActionDto action)
-                {
-                    currentPot += action.Bet;
-                    if (currentPot != action.Pot)
-                    {
-                        yield return new ValidationResult($"Invalid pot or bet size. Error at step: {step.Step}. Calculated current pot of {currentPot} plus bet of {action.Bet} is {currentPot + action.Bet}, which does not equal provided pot of {action.Pot}.", [nameof(Rounds)]);
-                    }
-                }
             }
         }
     }

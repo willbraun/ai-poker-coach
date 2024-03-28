@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace ai_poker_coach.Models.Domain
 {
-    public class Action : IHandStep
+    public class Pot
     {
         [Key]
-        public int ActionId { get; set; }
-        public int Decision { get; set; }
-        public decimal Bet { get; set; }
+        public int PotId { get; set; }
+        public string Winner { get; set; } = "";
         public ICollection<PotAction> PotActions = [];
 
         [ForeignKey("Hand")]
         public int HandId { get; set; }
         public Hand Hand { get; set; } = new();
-        public int Step { get; set; }
-        public int Player { get; set; }
     }
 }

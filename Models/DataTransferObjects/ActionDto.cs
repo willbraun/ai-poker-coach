@@ -22,8 +22,27 @@ namespace ai_poker_coach.Models.DataTransferObjects
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Bet must be positive.")]
         public decimal? Bet { get; set; }
 
-        [Required]
-        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Pot must be positive.")]
-        public decimal? Pot { get; set; }
+        public List<PotActionDto> PotActions { get; set; } = [];
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (PotActions == null)
+            {
+                yield break;
+            }
+
+            foreach (var potAction in PotActions)
+            {
+                List<ValidationResult> validationResults = [];
+                bool isValid = Validator.TryValidateObject(potAction, new ValidationContext(potAction), validationResults, true);
+                if (!isValid)
+                {
+                    foreach (var validationResult in validationResults)
+                    {
+                        yield return new ValidationResult(validationResult.ErrorMessage, [nameof(potAction)]);
+                    }
+                }
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace ai_poker_coach.Models.Domain
         public ICollection<Action> Actions { get; set; } = [];
         public ICollection<Card> Cards { get; set; } = [];
         public ICollection<Evaluation> Evaluations { get; set; } = [];
-        public string Winners { get; set; } = "";
+        public ICollection<Pot> Pots { get; set; } = [];
         public string Analysis { get; set; } = "";
         public DateTime CreatedTime { get; }
 

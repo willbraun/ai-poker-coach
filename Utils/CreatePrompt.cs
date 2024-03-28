@@ -10,10 +10,14 @@ namespace ai_poker_coach.Utils
 {
     public class PromptUtils
     {
+        private static List<decimal> pots = [0];
+
         public static string CreatePrompt(HandStepsDto body)
         {
             List<string> gameStyles = ["Cash Game", "Tournament"];
             List<string> deals = ["me", "the flop", "the turn", "the river"];
+
+            pots[0] = (decimal)(body.SmallBlind + body.BigBlind + (body.Ante * body.PlayerCount) + body.BigBlindAnte)!;
 
             string initial = $@"
             Game style: {gameStyles[body.GameStyle ?? 0]}
@@ -27,7 +31,7 @@ namespace ai_poker_coach.Utils
             Player Notes: {body.PlayerNotes}
             Winners: {body.Winners}
 
-            Starting pot size after blinds and antes: {body.SmallBlind + body.BigBlind + (body.Ante * body.PlayerCount) + body.BigBlindAnte}
+            Starting pot size after blinds and antes: {pots[0]}
             
             Hand Action:";
 
@@ -92,8 +96,37 @@ namespace ai_poker_coach.Utils
             string addition = "";
             foreach (var action in actions)
             {
+                foreach (var potAction in action.PotActions ?? [])
+                {
+                    if (potAction.PotIndex == null || potAction.Bet == null){
+                        break;
+                    }
+
+                    if (potAction.PotIndex > pots.Count - 1)
+                    {
+                        pots.Add((decimal)potAction.Bet);
+                    }
+                    else
+                    {
+                        pots[(int)potAction.PotIndex] += (decimal)potAction.Bet;
+                    }
+
+                }
                 string betSize = action.Decision > 1 ? $" {action.Bet}" : "";
-                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}. Pot is now {action.Pot}.\n";
+                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}.";
+
+                for (int i = 0; i < pots.Count; i++)
+                {
+                    string potName = "Main pot";
+                    if (i > 0)
+                    {
+                        potName = $"Side pot {i}";
+                    }
+
+                    addition += $" {potName} is now {pots[i]}. ";
+                }
+
+                addition += "\n";
             }
 
             return addition;
