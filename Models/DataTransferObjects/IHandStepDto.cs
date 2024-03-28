@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ai_poker_coach.Models.DataTransferObjects
 {
-    public interface IHandStepDto : IValidatableObject
+    public interface IHandStepDto
     {
         [Required]
         public int? Step { get; set; }

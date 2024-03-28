@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace ai_poker_coach.Models.DataTransferObjects
 {
-    public class PotActionDto
+    public class PotActionDto : IHandStepDto
     {
+        [Required]
+        public int? Step { get; set; }
+
+        [Required]
+        public int? Player { get; set; }
+
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Pot index must be positive.")]
         public int? PotIndex { get; set; }

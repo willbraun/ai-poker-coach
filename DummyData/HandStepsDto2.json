@@ -1,0 +1,304 @@
+{
+	"name": "Example with side pot",
+	"gameStyle": 1,
+	"playerCount": 4,
+	"position": 1,
+	"smallBlind": 100,
+	"bigBlind": 200,
+	"ante": 0,
+	"bigBlindAnte": 0,
+	"myStack": 1000,
+	"playerNotes": "",
+	"pots": [
+		{
+			"potIndex": 0,
+			"winner": "2"
+		},
+		{
+			"potIndex": 1,
+			"winner": "2"
+		}
+	],
+	"rounds": [
+		{
+			"cards": [
+				{
+					"step": 1,
+					"player": 1,
+					"value": "K",
+					"suit": "D"
+				},
+				{
+					"step": 2,
+					"player": 1,
+					"value": "3",
+					"suit": "C"
+				}
+			],
+			"evaluation": {
+				"step": 3,
+				"player": 4,
+				"value": "King high"
+			},
+			"actions": [
+				{
+					"step": 4,
+					"player": 1,
+					"decision": 3,
+					"bet": 100
+				},
+				{
+					"step": 5,
+					"player": 2,
+					"decision": 3,
+					"bet": 200
+				},
+				{
+					"step": 6,
+					"player": 3,
+					"decision": 2,
+					"bet": 200
+				},
+				{
+					"step": 7,
+					"player": 4,
+					"decision": 2,
+					"bet": 200
+				},
+				{
+					"step": 8,
+					"player": 1,
+					"decision": 2,
+					"bet": 100
+				},
+				{
+					"step": 9,
+					"player": 2,
+					"decision": 2,
+					"bet": 0
+				}
+			],
+			"potActions": [
+				{
+					"step": 10,
+					"player": 1,
+					"potIndex": 0,
+					"bet": 200
+				},
+				{
+					"step": 11,
+					"player": 2,
+					"potIndex": 0,
+					"bet": 200
+				},
+				{
+					"step": 12,
+					"player": 3,
+					"potIndex": 0,
+					"bet": 200
+				},
+				{
+					"step": 13,
+					"player": 4,
+					"potIndex": 0,
+					"bet": 200
+				}
+			]
+		},
+		{
+			"cards": [
+				{
+					"step": 14,
+					"player": 0,
+					"value": "K",
+					"suit": "D"
+				},
+				{
+					"step": 15,
+					"player": 0,
+					"value": "Q",
+					"suit": "H"
+				},
+				{
+					"step": 16,
+					"player": 0,
+					"value": "3",
+					"suit": "S"
+				}
+			],
+			"evaluation": {
+				"step": 17,
+				"player": 1,
+				"value": "Two Pair, Kings and Threes"
+			},
+			"actions": [
+				{
+					"step": 18,
+					"player": 1,
+					"decision": 1,
+					"bet": 0
+				},
+				{
+					"step": 19,
+					"player": 2,
+					"decision": 4,
+					"bet": 1800
+				},
+				{
+					"step": 20,
+					"player": 3,
+					"decision": 0,
+					"bet": 0
+				},
+				{
+					"step": 21,
+					"player": 4,
+					"decision": 2,
+					"bet": 1800
+				},
+				{
+					"step": 22,
+					"player": 1,
+					"decision": 5,
+					"bet": 800
+				}
+			],
+			"potActions": [
+				{
+					"step": 23,
+					"player": 1,
+					"potIndex": 0,
+					"bet": 800
+				},
+				{
+					"step": 24,
+					"player": 2,
+					"potIndex": 0,
+					"bet": 800
+				},
+				{
+					"step": 25,
+					"player": 4,
+					"potIndex": 0,
+					"bet": 800
+				},
+				{
+					"step": 26,
+					"player": 2,
+					"potIndex": 1,
+					"bet": 1000
+				},
+				{
+					"step": 27,
+					"player": 4,
+					"potIndex": 1,
+					"bet": 1000
+				}
+			]
+		},
+		{
+			"cards": [
+				{
+					"step": 28,
+					"player": 0,
+					"value": "8",
+					"suit": "S"
+				}
+			],
+			"evaluation": {
+				"step": 29,
+				"player": 1,
+				"value": "Two Pair, Kings and Threes"
+			},
+			"actions": [
+				{
+					"step": 30,
+					"player": 2,
+					"decision": 1,
+					"bet": 0
+				},
+				{
+					"step": 31,
+					"player": 4,
+					"decision": 1,
+					"bet": 0
+				}
+			],
+			"potActions": []
+		},
+		{
+			"cards": [
+				{
+					"step": 32,
+					"player": 0,
+					"value": "4",
+					"suit": "D"
+				}
+			],
+			"evaluation": {
+				"step": 33,
+				"player": 1,
+				"value": "Two Pair, Kings and Threes"
+			},
+			"actions": [
+				{
+					"step": 34,
+					"player": 2,
+					"decision": 1,
+					"bet": 0
+				},
+				{
+					"step": 35,
+					"player": 4,
+					"decision": 1,
+					"bet": 0
+				}
+			],
+			"potActions": []
+		}
+	],
+	"villains": [
+		{
+			"cards": [
+				{
+					"step": 36,
+					"player": 2,
+					"value": "Q",
+					"suit": "D"
+				},
+				{
+					"step": 37,
+					"player": 2,
+					"value": "Q",
+					"suit": "S"
+				}
+			],
+			"evaluation": {
+				"step": 38,
+				"player": 2,
+				"value": "Three of a Kind, Queens"
+			}
+		},
+		{
+			"cards": [
+				{
+					"step": 39,
+					"player": 4,
+					"value": "A",
+					"suit": "D"
+				},
+				{
+					"step": 40,
+					"player": 4,
+					"value": "A",
+					"suit": "S"
+				}
+			],
+			"evaluation": {
+				"step": 41,
+				"player": 4,
+				"value": "Pair of Aces"
+			}
+		}
+	]
+}

@@ -16,10 +16,5 @@ namespace ai_poker_coach.Models.DataTransferObjects
         
         [Required]
         public string? Value { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            yield break;
-        }
     }
 }

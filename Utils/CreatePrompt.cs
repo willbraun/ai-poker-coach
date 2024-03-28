@@ -17,7 +17,8 @@ namespace ai_poker_coach.Utils
             List<string> gameStyles = ["Cash Game", "Tournament"];
             List<string> deals = ["me", "the flop", "the turn", "the river"];
 
-            pots[0] = (decimal)(body.SmallBlind + body.BigBlind + (body.Ante * body.PlayerCount) + body.BigBlindAnte)!;
+            pots.Clear();
+            pots.Add((decimal)((body.Ante * body.PlayerCount) + body.BigBlindAnte)!);
 
             string initial = $@"
             Game style: {gameStyles[body.GameStyle ?? 0]}
@@ -29,9 +30,8 @@ namespace ai_poker_coach.Utils
             Big Blind Ante: {body.BigBlindAnte}
             My Stack: {body.MyStack}
             Player Notes: {body.PlayerNotes}
-            Winners: {body.Winners}
 
-            Starting pot size after blinds and antes: {pots[0]}
+            Starting pot size after antes: {pots[0]}
             
             Hand Action:";
 
@@ -43,6 +43,7 @@ namespace ai_poker_coach.Utils
                 message += $"Dealer deals {deals[i]}: {ListCards(body.Rounds[i].Cards)}\n";
                 message += $"My CURRENT HAND is now: {body.Rounds[i].Evaluation.Value}\n";
                 message += GetActionMessages(body.Rounds[i].Actions, body.Position ?? 0);
+                message += GetPotActionMessages(body.Rounds[i].PotActions, body.Position ?? 0);
             }
 
             foreach (var villain in body.Villains)
@@ -51,8 +52,12 @@ namespace ai_poker_coach.Utils
                 message += $"Player {villain.Cards[0].Player}'s CURRENT HAND is: {villain.Evaluation.Value}\n";
             }
 
-            message += "Hand winners: " + string.Join(", ", body.Winners!.Split(",").Select(winner => "Player " + winner + (winner == body.Position.ToString() ? " (me)" : "")));
-
+            for (int i = 0; i < body.Pots!.Count; i++)
+            {
+                string potName = GetPotName(i);
+                message += $"Winner of the {potName} is " + string.Join(", ", body.Pots[i].Winner!.Split(",").Select(winner => "Player " + winner + (winner == body.Position.ToString() ? " (me)" : ""))) + "\n";
+            }
+            
             return message;
         }
 
@@ -96,40 +101,46 @@ namespace ai_poker_coach.Utils
             string addition = "";
             foreach (var action in actions)
             {
-                foreach (var potAction in action.PotActions ?? [])
-                {
-                    if (potAction.PotIndex == null || potAction.Bet == null){
-                        break;
-                    }
-
-                    if (potAction.PotIndex > pots.Count - 1)
-                    {
-                        pots.Add((decimal)potAction.Bet);
-                    }
-                    else
-                    {
-                        pots[(int)potAction.PotIndex] += (decimal)potAction.Bet;
-                    }
-
-                }
                 string betSize = action.Decision > 1 ? $" {action.Bet}" : "";
-                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}.";
-
-                for (int i = 0; i < pots.Count; i++)
-                {
-                    string potName = "Main pot";
-                    if (i > 0)
-                    {
-                        potName = $"Side pot {i}";
-                    }
-
-                    addition += $" {potName} is now {pots[i]}. ";
-                }
-
-                addition += "\n";
+                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}.\n";
             }
 
             return addition;
         }
-    }
+
+        static string GetPotActionMessages(List<PotActionDto> potActions, int myPosition)
+        {
+            string addition = "";
+            foreach (var potAction in potActions)
+            {
+                if (potAction.PotIndex > pots.Count - 1)
+                {
+                    pots.Add((decimal)potAction.Bet!);
+                }
+                else
+                {
+                    pots[(int)potAction.PotIndex!] += (decimal)potAction.Bet!;
+                }
+
+                addition += $"Player {potAction.Player}{(potAction.Player == myPosition ? " (me)" : "")} bets {potAction.Bet} into the {GetPotName(potAction.PotIndex ?? 0)}. The {GetPotName(potAction.PotIndex ?? 0)} total is now {pots[(int)potAction.PotIndex!]}.\n";
+            }
+
+            return addition;
+        }
+
+        static string GetPotName(int index)
+        {
+            string name = "main pot";
+            if (index == 1)
+            {
+                name = $"side pot";
+            }
+            if (index > 1)
+            {
+                name = $"side pot {index}";
+            }
+
+            return name;
+        }
+    }   
 }

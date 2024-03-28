@@ -44,15 +44,15 @@ namespace DotNet8Authentication.Data
                 .IsRequired();
 
             modelBuilder.Entity<Hand>()
-                .HasMany(e => e.Pots)
+                .HasMany(e => e.PotActions)
                 .WithOne(e => e.Hand)
                 .HasForeignKey(e => e.HandId)
                 .IsRequired();
-
-            modelBuilder.Entity<Action>()
-                .HasMany(e => e.PotActions)
-                .WithOne(e => e.Action)
-                .HasForeignKey(e => e.ActionId)
+                
+            modelBuilder.Entity<Hand>()
+                .HasMany(e => e.Pots)
+                .WithOne(e => e.Hand)
+                .HasForeignKey(e => e.HandId)
                 .IsRequired();
 
             modelBuilder.Entity<Pot>()

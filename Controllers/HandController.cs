@@ -41,55 +41,55 @@ namespace ai_poker_coach.Controllers
 
             string prompt = CreatePrompt(body);
 
-            // var openaiBody = new
-            // {
-            //     assistant_id = Environment.GetEnvironmentVariable("OPENAI_ASSISTANT_ID"),
-            //     thread = new
-            //     {
-            //         messages = new[] {
-            //             new {
-            //                 role = "user",
-            //                 content = prompt,
-            //                 file_ids = new[] {
-            //                     Environment.GetEnvironmentVariable("OPENAI_FILE_ID_1"),
-            //                     Environment.GetEnvironmentVariable("OPENAI_FILE_ID_2"),
-            //                     Environment.GetEnvironmentVariable("OPENAI_FILE_ID_3")
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     stream = true
-            // };
+            var openaiBody = new
+            {
+                assistant_id = Environment.GetEnvironmentVariable("OPENAI_ASSISTANT_ID"),
+                thread = new
+                {
+                    messages = new[] {
+                        new {
+                            role = "user",
+                            content = prompt,
+                            file_ids = new[] {
+                                Environment.GetEnvironmentVariable("OPENAI_FILE_ID_1"),
+                                Environment.GetEnvironmentVariable("OPENAI_FILE_ID_2"),
+                                Environment.GetEnvironmentVariable("OPENAI_FILE_ID_3")
+                            }
+                        }
+                    }
+                },
+                stream = true
+            };
 
-            // string analysis = "";
-            // try
-            // {
-            //     var httpClient = _httpClientFactory.CreateClient();
-            //     httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
-            //     httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
-            //     var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
+            string analysis = "";
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient();
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}");
+                httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
+                var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
 
-            //     response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
-            //     using Stream stream = await response.Content.ReadAsStreamAsync();
-            //     using StreamReader reader = new(stream, Encoding.UTF8);
-            //     while (!reader.EndOfStream)
-            //     {
-            //         string line = reader.ReadLine()!;
-            //         if (line.Contains("\"object\":\"thread.message\",") &&
-            //             line.Contains("\"status\":\"completed\","))
-            //         {
-            //             analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
-            //             break;
-            //         }
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     return StatusCode(500, $"An error occurred while analyzing data: {ex.Message}");
-            // }
+                using Stream stream = await response.Content.ReadAsStreamAsync();
+                using StreamReader reader = new(stream, Encoding.UTF8);
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine()!;
+                    if (line.Contains("\"object\":\"thread.message\",") &&
+                        line.Contains("\"status\":\"completed\","))
+                    {
+                        analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while analyzing data: {ex.Message}");
+            }
 
-            return Ok(prompt);
+            return Ok(analysis);
         }
 
         [HttpPost]

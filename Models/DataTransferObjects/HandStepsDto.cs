@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using ai_poker_coach.Models.Domain;
 
 namespace ai_poker_coach.Models.DataTransferObjects
 {
@@ -39,11 +40,10 @@ namespace ai_poker_coach.Models.DataTransferObjects
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]
         public decimal? MyStack { get; set; }
 
-        [Required]
         public string? PlayerNotes { get; set; }
 
         [Required]
-        public string? Winners { get; set; }
+        public List<PotDto>? Pots { get; set; }
 
         [Required]
         public List<RoundDto>? Rounds { get; set; }
@@ -82,11 +82,25 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 yield return new ValidationResult($"There must be 1 card in the fourth round (river). Provided: {Rounds[3].Cards.Count}.", [nameof(Rounds)]);
             }
 
+            if (Pots![0].PotIndex != 0)
+            {
+                yield return new ValidationResult($"Pots must start at 0. ", [nameof(Pots)]);
+            }
+
+            for (int i = 1; i < Pots!.Count; i++)
+            {
+                if (Pots[i].PotIndex - 1 != Pots[i-1].PotIndex)
+                {
+                    yield return new ValidationResult($"Pots must increment by 1. Error at pot: {Pots[i].PotIndex}, expected {Pots[i-1].PotIndex + 1}. ", [nameof(Pots)]);
+                }
+            }
+
             List<IHandStepDto> steps = [];
             foreach (var round in Rounds)
             {
-                steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions];
+                steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions, ..round.PotActions];
             }
+
 
             foreach (var villain in Villains)
             {
@@ -140,11 +154,18 @@ namespace ai_poker_coach.Models.DataTransferObjects
         }
     }
 
+    public class PotDto
+    {
+        public int PotIndex { get; set; }
+        public string? Winner { get; set; }
+    }
+
     public class RoundDto
     {
         public List<CardDto> Cards { get; set; } = [];
         public EvaluationDto Evaluation { get; set; } = new();
         public List<ActionDto> Actions { get; set; } = [];
+        public List<PotActionDto> PotActions { get; set; } = [];
     }
 
     public class VillainDto

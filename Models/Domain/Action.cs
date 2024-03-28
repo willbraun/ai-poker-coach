@@ -13,7 +13,6 @@ namespace ai_poker_coach.Models.Domain
         public int ActionId { get; set; }
         public int Decision { get; set; }
         public decimal Bet { get; set; }
-        public ICollection<PotAction> PotActions = [];
 
         [ForeignKey("Hand")]
         public int HandId { get; set; }
