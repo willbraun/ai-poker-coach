@@ -89,16 +89,16 @@ namespace ai_poker_coach.Models.DataTransferObjects
 
             for (int i = 1; i < Pots!.Count; i++)
             {
-                if (Pots[i].PotIndex - 1 != Pots[i-1].PotIndex)
+                if (Pots[i].PotIndex - 1 != Pots[i - 1].PotIndex)
                 {
-                    yield return new ValidationResult($"Pots must increment by 1. Error at pot: {Pots[i].PotIndex}, expected {Pots[i-1].PotIndex + 1}. ", [nameof(Pots)]);
+                    yield return new ValidationResult($"Pots must increment by 1. Error at pot: {Pots[i].PotIndex}, expected {Pots[i - 1].PotIndex + 1}. ", [nameof(Pots)]);
                 }
             }
 
             List<IHandStepDto> steps = [];
             foreach (var round in Rounds)
             {
-                steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions, ..round.PotActions];
+                steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions, .. round.PotActions];
             }
 
 
@@ -128,6 +128,14 @@ namespace ai_poker_coach.Models.DataTransferObjects
                     foreach (var validationResult in validationResults)
                     {
                         yield return new ValidationResult(validationResult.ErrorMessage, [nameof(step)]);
+                    }
+                }
+
+                if (step is PotActionDto potAction)
+                {
+                    if (potAction.PotIndex < 0 || potAction.PotIndex > Pots.Count - 1)
+                    {
+                        yield return new ValidationResult($"Pot index of {potAction.PotIndex} at step {potAction.Step} is outside the expected range of 0-{Pots.Count - 1}.", [nameof(potAction)]);
                     }
                 }
 
