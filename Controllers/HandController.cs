@@ -100,58 +100,16 @@ namespace ai_poker_coach.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = _dbContext.ApplicationUsers.FirstOrDefault(u => u.Id == body.ApplicationUserId);
+            var user = _dbContext.ApplicationUsers.First(u => u.Id == body.ApplicationUserId);
             if (user == null)
             {
                 return NotFound($"User ID of {body.ApplicationUserId} does not exist.");
             }
 
-            ICollection<Action> actions = [];
-            ICollection<Card> cards = [];
-            ICollection<Evaluation> evaluations = [];
-
-            foreach (var round in body.HandSteps!.Rounds!)
-            {
-                actions = [..actions, ..round.Actions.Select(actionDto => new Action {
-                    Step = actionDto.Step ?? 0,
-                    Player = actionDto.Player ?? 0,
-                    Decision = actionDto.Decision ?? 0,
-                    Bet = actionDto.Bet ?? 0,
-                })];
-
-                cards = [..cards, ..round.Cards.Select(cardDto => new Card {
-                    Step = cardDto.Step ?? 0,
-                    Player = cardDto.Player ?? 0,
-                    Value = cardDto.Value!,
-                    Suit = cardDto.Suit!,
-                })];
-
-                evaluations = [..evaluations, new Evaluation {
-                    Step = round.Evaluation.Step ?? 0,
-                    Player = round.Evaluation.Player ?? 0,
-                    Value = round.Evaluation.Value!
-                }];
-            }
-
-            foreach (var villain in body.HandSteps.Villains)
-            {
-                cards = [..cards, ..villain.Cards.Select(cardDto => new Card {
-                    Step = cardDto.Step ?? 0,
-                    Player = cardDto.Player ?? 0,
-                    Value = cardDto.Value!,
-                    Suit = cardDto.Suit!,
-                })];
-
-                evaluations = [..evaluations, new Evaluation {
-                    Step = villain.Evaluation.Step ?? 0,
-                    Player = villain.Evaluation.Player ?? 0,
-                    Value = villain.Evaluation.Value!
-                }];
-            }
-
             Hand hand = new()
             {
-                ApplicationUserId = body.ApplicationUserId,
+                ApplicationUser = user,
+                ApplicationUserId = body.ApplicationUserId!,
                 Name = body.HandSteps!.Name,
                 GameStyle = body.HandSteps.GameStyle ?? 0,
                 PlayerCount = body.HandSteps.PlayerCount ?? 0,
@@ -163,10 +121,84 @@ namespace ai_poker_coach.Controllers
                 MyStack = body.HandSteps.MyStack ?? 0,
                 PlayerNotes = body.HandSteps.PlayerNotes!,
                 Analysis = body.Analysis!,
-                Actions = actions,
-                Cards = cards,
-                Evaluations = evaluations
             };
+
+            ICollection<Pot> pots = body.HandSteps!.Pots!.Select(potDto => new Pot
+            {
+                Hand = hand,
+                HandId = hand.HandId,
+                Winner = potDto.Winner!
+            }).ToList();
+
+            ICollection < Card> cards = [];
+            ICollection<Evaluation> evaluations = [];
+            ICollection<Action> actions = [];
+            ICollection<PotAction> potActions = [];
+
+            foreach (var round in body.HandSteps!.Rounds!)
+            {
+                cards = [..cards, ..round.Cards.Select(cardDto => new Card {
+                    Hand = hand,
+                    HandId = hand.HandId,
+                    Step = cardDto.Step ?? 0,
+                    Player = cardDto.Player ?? 0,
+                    Value = cardDto.Value!,
+                    Suit = cardDto.Suit!,
+                })];
+
+                evaluations = [..evaluations, new Evaluation {
+                    Hand = hand,
+                    HandId = hand.HandId,
+                    Step = round.Evaluation.Step ?? 0,
+                    Player = round.Evaluation.Player ?? 0,
+                    Value = round.Evaluation.Value!
+                }];
+
+                actions = [..actions, ..round.Actions.Select(actionDto => new Action {
+                    Hand = hand,
+                    HandId = hand.HandId,
+                    Step = actionDto.Step ?? 0,
+                    Player = actionDto.Player ?? 0,
+                    Decision = actionDto.Decision ?? 0,
+                    Bet = actionDto.Bet ?? 0,
+                })];
+
+                potActions = [..potActions, ..round.PotActions.Select(potActionDto => new PotAction {
+                    Hand = hand,
+                    HandId = hand.HandId,
+                    Step = potActionDto.Step ?? 0,
+                    Player = potActionDto.Player ?? 0,
+                    Pot = pots.ElementAt((int)potActionDto.PotIndex!),
+                    PotId = pots.ElementAt((int)potActionDto.PotIndex!).PotId,
+                    Bet = potActionDto.Bet ?? 0,
+                })];
+            }
+
+            foreach (var villain in body.HandSteps.Villains)
+            {
+                cards = [..cards, ..villain.Cards.Select(cardDto => new Card {
+                    Hand = hand,
+                    HandId = hand.HandId,
+                    Step = cardDto.Step ?? 0,
+                    Player = cardDto.Player ?? 0,
+                    Value = cardDto.Value!,
+                    Suit = cardDto.Suit!,
+                })];
+
+                evaluations = [..evaluations, new Evaluation {
+                    Hand = hand,
+                    HandId = hand.HandId,
+                    Step = villain.Evaluation.Step ?? 0,
+                    Player = villain.Evaluation.Player ?? 0,
+                    Value = villain.Evaluation.Value!
+                }];
+            }
+
+            hand.Pots = pots;
+            hand.Cards = cards;
+            hand.Evaluations = evaluations;
+            hand.Actions = actions;
+            hand.PotActions = potActions;
 
             user.Hands.Add(hand);
 

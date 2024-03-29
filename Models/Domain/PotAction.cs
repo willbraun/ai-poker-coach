@@ -12,8 +12,8 @@ namespace ai_poker_coach.Models.Domain
         [Key]
         public int PotActionId { get; set; }
         public int Player { get; set; }
-        public int Bet { get; set; }
-        
+        public decimal Bet { get; set; }
+
         [ForeignKey("Pot")]
         public int PotId { get; set; }
         public Pot Pot { get; set; } = new();
