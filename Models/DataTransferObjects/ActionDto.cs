@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Action = ai_poker_coach.Models.Domain.Action;
 
 namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class ActionDto : IHandStepDto
     {
+        public ActionDto() { }
+
+        public ActionDto(Action action)
+            : this()
+        {
+            Step = action.Step;
+            Player = action.Player;
+            Decision = action.Decision;
+            Bet = action.Bet;
+        }
+
         [Required]
         public int? Step { get; set; }
 

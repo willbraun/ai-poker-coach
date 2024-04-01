@@ -11,6 +11,7 @@ namespace ai_poker_coach.Models.Domain
     {
         [Key]
         public int PotId { get; set; }
+        public int PotIndex { get; set; }
         public string Winner { get; set; } = "";
         public ICollection<PotAction> PotActions = [];
 

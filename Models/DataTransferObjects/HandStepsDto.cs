@@ -54,32 +54,50 @@ namespace ai_poker_coach.Models.DataTransferObjects
         {
             if (Position > PlayerCount || Position < 1)
             {
-                yield return new ValidationResult($"Position of {Position} is invalid. Must be in the range 1-{PlayerCount}.", [nameof(Position)]);
+                yield return new ValidationResult(
+                    $"Position of {Position} is invalid. Must be in the range 1-{PlayerCount}.",
+                    [nameof(Position)]
+                );
             }
 
             if (Rounds!.Count < 1 || Rounds.Count > 4)
             {
-                yield return new ValidationResult($"There must be between 1 and 4 rounds. Provided: {Rounds.Count}.", [nameof(Rounds)]);
+                yield return new ValidationResult(
+                    $"There must be between 1 and 4 rounds. Provided: {Rounds.Count}.",
+                    [nameof(Rounds)]
+                );
             }
 
             if (Rounds[0].Cards.Count != 2)
             {
-                yield return new ValidationResult($"There must be 2 cards in the first round (hole cards). Provided: {Rounds[0].Cards.Count}.", [nameof(Rounds)]);
+                yield return new ValidationResult(
+                    $"There must be 2 cards in the first round (hole cards). Provided: {Rounds[0].Cards.Count}.",
+                    [nameof(Rounds)]
+                );
             }
 
             if (Rounds[1].Cards.Count != 3)
             {
-                yield return new ValidationResult($"There must be 3 cards in the second round (flop). Provided: {Rounds[1].Cards.Count}.", [nameof(Rounds)]);
+                yield return new ValidationResult(
+                    $"There must be 3 cards in the second round (flop). Provided: {Rounds[1].Cards.Count}.",
+                    [nameof(Rounds)]
+                );
             }
 
             if (Rounds[2].Cards.Count != 1)
             {
-                yield return new ValidationResult($"There must be 1 card in the third round (turn). Provided: {Rounds[2].Cards.Count}.", [nameof(Rounds)]);
+                yield return new ValidationResult(
+                    $"There must be 1 card in the third round (turn). Provided: {Rounds[2].Cards.Count}.",
+                    [nameof(Rounds)]
+                );
             }
 
             if (Rounds[3].Cards.Count != 1)
             {
-                yield return new ValidationResult($"There must be 1 card in the fourth round (river). Provided: {Rounds[3].Cards.Count}.", [nameof(Rounds)]);
+                yield return new ValidationResult(
+                    $"There must be 1 card in the fourth round (river). Provided: {Rounds[3].Cards.Count}.",
+                    [nameof(Rounds)]
+                );
             }
 
             if (Pots![0].PotIndex != 0)
@@ -91,7 +109,10 @@ namespace ai_poker_coach.Models.DataTransferObjects
             {
                 if (Pots[i].PotIndex - 1 != Pots[i - 1].PotIndex)
                 {
-                    yield return new ValidationResult($"Pots must increment by 1. Error at pot: {Pots[i].PotIndex}, expected {Pots[i - 1].PotIndex + 1}. ", [nameof(Pots)]);
+                    yield return new ValidationResult(
+                        $"Pots must increment by 1. Error at pot: {Pots[i].PotIndex}, expected {Pots[i - 1].PotIndex + 1}. ",
+                        [nameof(Pots)]
+                    );
                 }
             }
 
@@ -101,12 +122,14 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions, .. round.PotActions];
             }
 
-
             foreach (var villain in Villains)
             {
                 if (villain.Cards.Count != 2)
                 {
-                    yield return new ValidationResult($"Player {villain.Cards[0].Player} must have 2 cards. Provided: {villain.Cards.Count}.", [nameof(Villains)]);
+                    yield return new ValidationResult(
+                        $"Player {villain.Cards[0].Player} must have 2 cards. Provided: {villain.Cards.Count}.",
+                        [nameof(Villains)]
+                    );
                 }
 
                 steps = [.. steps, .. villain.Cards, villain.Evaluation];
@@ -135,7 +158,10 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 {
                     if (potAction.PotIndex < 0 || potAction.PotIndex > Pots.Count - 1)
                     {
-                        yield return new ValidationResult($"Pot index of {potAction.PotIndex} at step {potAction.Step} is outside the expected range of 0-{Pots.Count - 1}.", [nameof(potAction)]);
+                        yield return new ValidationResult(
+                            $"Pot index of {potAction.PotIndex} at step {potAction.Step} is outside the expected range of 0-{Pots.Count - 1}.",
+                            [nameof(potAction)]
+                        );
                     }
                 }
 
@@ -150,12 +176,18 @@ namespace ai_poker_coach.Models.DataTransferObjects
 
                 if (step.Player < playerMin || step.Player > PlayerCount)
                 {
-                    yield return new ValidationResult($"Player value of {step.Player} at step {step.Step} is invalid. Must be in range {playerMin}-{PlayerCount}.", [nameof(step)]);
+                    yield return new ValidationResult(
+                        $"Player value of {step.Player} at step {step.Step} is invalid. Must be in range {playerMin}-{PlayerCount}.",
+                        [nameof(step)]
+                    );
                 }
 
                 if (step.Step - currentStep != 1)
                 {
-                    yield return new ValidationResult($"Steps must increment by 1. Error at step: {step.Step}, expected {currentStep + 1}. ", [nameof(Rounds)]);
+                    yield return new ValidationResult(
+                        $"Steps must increment by 1. Error at step: {step.Step}, expected {currentStep + 1}. ",
+                        [nameof(Rounds)]
+                    );
                 }
                 currentStep++;
             }
