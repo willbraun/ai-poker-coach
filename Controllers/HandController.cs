@@ -134,6 +134,7 @@ namespace ai_poker_coach.Controllers
             {
                 Hand = hand,
                 HandId = hand.HandId,
+                PotIndex = potDto.PotIndex,
                 Winner = potDto.Winner!
             })
                 .ToList();
@@ -266,12 +267,12 @@ namespace ai_poker_coach.Controllers
                     List<VillainDto> villains = [];
                     List<IHandStep> unsortedSteps =
                     [
-                        .. hand.Cards,
-                        .. hand.Evaluations,
-                        .. hand.Actions,
-                        .. hand.PotActions
+                        ..hand.Cards,
+                        ..hand.Evaluations,
+                        ..hand.Actions,
+                        ..hand.PotActions
                     ];
-                    List<IHandStep> steps = [.. unsortedSteps.OrderBy(step => step.Step)];
+                    List<IHandStep> steps = [..unsortedSteps.OrderBy(step => step.Step)];
 
                     foreach (var step in steps.Select((data, i) => new { data, i }))
                     {

@@ -119,7 +119,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
             List<IHandStepDto> steps = [];
             foreach (var round in Rounds)
             {
-                steps = [.. steps, .. round.Cards, round.Evaluation, .. round.Actions, .. round.PotActions];
+                steps = [..steps, ..round.Cards, round.Evaluation, ..round.Actions, ..round.PotActions];
             }
 
             foreach (var villain in Villains)
@@ -132,7 +132,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
                     );
                 }
 
-                steps = [.. steps, .. villain.Cards, villain.Evaluation];
+                steps = [..steps, ..villain.Cards, villain.Evaluation];
             }
 
             if (steps[0].Step != 1)
