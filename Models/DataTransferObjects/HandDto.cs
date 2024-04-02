@@ -10,6 +10,15 @@ namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class HandDto : IValidatableObject
     {
+        [Required]
+        public string? ApplicationUserId { get; set; }
+
+        [Required]
+        public HandStepsDto? HandSteps { get; set; }
+
+        [Required]
+        public string? Analysis { get; set; }
+
         public HandDto() { }
 
         public HandDto(Hand hand)
@@ -19,15 +28,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
             HandSteps = new HandStepsDto(hand);
             Analysis = hand.Analysis;
         }
-
-        [Required]
-        public string? ApplicationUserId { get; set; }
-
-        [Required]
-        public HandStepsDto? HandSteps { get; set; }
-
-        [Required]
-        public string? Analysis { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

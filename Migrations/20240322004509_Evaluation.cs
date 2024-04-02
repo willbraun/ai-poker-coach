@@ -15,8 +15,12 @@ namespace ai_poker_coach.Migrations
                 name: "Evaluation",
                 columns: table => new
                 {
-                    EvaluationId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EvaluationId = table
+                        .Column<int>(type: "integer", nullable: false)
+                        .Annotation(
+                            "Npgsql:ValueGenerationStrategy",
+                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                        ),
                     Value = table.Column<string>(type: "text", nullable: false),
                     HandId = table.Column<int>(type: "integer", nullable: false),
                     Step = table.Column<int>(type: "integer", nullable: false),
@@ -30,20 +34,18 @@ namespace ai_poker_coach.Migrations
                         column: x => x.HandId,
                         principalTable: "Hand",
                         principalColumn: "HandId",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Evaluation_HandId",
-                table: "Evaluation",
-                column: "HandId");
+            migrationBuilder.CreateIndex(name: "IX_Evaluation_HandId", table: "Evaluation", column: "HandId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Evaluation");
+            migrationBuilder.DropTable(name: "Evaluation");
         }
     }
 }

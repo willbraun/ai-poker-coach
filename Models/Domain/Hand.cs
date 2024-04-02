@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using ai_poker_coach.Models.DataTransferObjects;
 
 namespace ai_poker_coach.Models.Domain
 {
@@ -35,6 +36,59 @@ namespace ai_poker_coach.Models.Domain
 
         public Hand()
         {
+            CreatedTime = DateTime.UtcNow;
+        }
+
+        public Hand(ApplicationUser user, HandDto handDto)
+        {
+            if (user.Id != handDto.ApplicationUserId)
+            {
+                throw new Exception($"User ID {user.Id} does not match Hand DTO user ID {handDto.ApplicationUserId}");
+            }
+
+            ApplicationUser = user;
+            ApplicationUserId = user.Id!;
+            Name = handDto.HandSteps!.Name;
+            GameStyle = handDto.HandSteps.GameStyle ?? 0;
+            PlayerCount = handDto.HandSteps.PlayerCount ?? 0;
+            Position = handDto.HandSteps.Position ?? 0;
+            SmallBlind = handDto.HandSteps.SmallBlind ?? 0;
+            BigBlind = handDto.HandSteps.BigBlind ?? 0;
+            Ante = handDto.HandSteps.Ante ?? 0;
+            BigBlindAnte = handDto.HandSteps.BigBlindAnte ?? 0;
+            MyStack = handDto.HandSteps.MyStack ?? 0;
+            PlayerNotes = handDto.HandSteps.PlayerNotes!;
+            Analysis = handDto.Analysis!;
+
+            Pots = handDto.HandSteps!.Pots!.Select(potDto => new Pot(this, potDto)).ToList();
+
+            ICollection<Card> cards = [];
+            ICollection<Evaluation> evaluations = [];
+            ICollection<Action> actions = [];
+            ICollection<PotAction> potActions = [];
+
+            foreach (var round in handDto.HandSteps!.Rounds!)
+            {
+                cards = [..cards, ..round.Cards.Select(cardDto => new Card(this, cardDto))];
+                evaluations = [..evaluations, new Evaluation(this, round.Evaluation)];
+                actions = [..actions, ..round.Actions.Select(actionDto => new Action(this, actionDto))];
+                potActions =
+                [
+                    ..potActions,
+                    ..round.PotActions.Select(potActionDto => new PotAction(this, potActionDto))
+                ];
+            }
+
+            foreach (var villain in handDto.HandSteps.Villains)
+            {
+                cards = [..cards, ..villain.Cards.Select(cardDto => new Card(this, cardDto))];
+                evaluations = [..evaluations, new Evaluation(this, villain.Evaluation)];
+            }
+
+            Cards = cards;
+            Evaluations = evaluations;
+            Actions = actions;
+            PotActions = potActions;
             CreatedTime = DateTime.UtcNow;
         }
     }

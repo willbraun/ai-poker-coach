@@ -9,6 +9,15 @@ namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class EvaluationDto : IHandStepDto
     {
+        [Required]
+        public int? Step { get; set; }
+
+        [Required]
+        public int? Player { get; set; }
+
+        [Required]
+        public string? Value { get; set; }
+
         public EvaluationDto() { }
 
         public EvaluationDto(Evaluation evaluation)
@@ -18,14 +27,5 @@ namespace ai_poker_coach.Models.DataTransferObjects
             Player = evaluation.Player;
             Value = evaluation.Value;
         }
-
-        [Required]
-        public int? Step { get; set; }
-
-        [Required]
-        public int? Player { get; set; }
-
-        [Required]
-        public string? Value { get; set; }
     }
 }

@@ -9,16 +9,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class CardDto : IHandStepDto
     {
-        public CardDto() { }
-
-        public CardDto(Card card) : this()
-        {
-            Step = card.Step;
-            Player = card.Player;
-            Value = card.Value;
-            Suit = card.Suit;
-        }
-
         [Required]
         public int? Step { get; set; }
 
@@ -30,5 +20,16 @@ namespace ai_poker_coach.Models.DataTransferObjects
 
         [Required]
         public string? Suit { get; set; }
+
+        public CardDto() { }
+
+        public CardDto(Card card)
+            : this()
+        {
+            Step = card.Step;
+            Player = card.Player;
+            Value = card.Value;
+            Suit = card.Suit;
+        }
     }
 }

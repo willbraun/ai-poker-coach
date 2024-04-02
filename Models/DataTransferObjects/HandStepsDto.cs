@@ -10,6 +10,47 @@ namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class HandStepsDto : IValidatableObject
     {
+        public string Name { get; set; } = "";
+
+        [Required]
+        [Range(0, 1, ErrorMessage = "Game style must be either 0 (tournament) or 1 (cash game).")]
+        public int? GameStyle { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Player count must be a positive integer.")]
+        public int? PlayerCount { get; set; }
+
+        [Required]
+        public int? Position { get; set; }
+
+        [Required]
+        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Small blind must be positive.")]
+        public decimal? SmallBlind { get; set; }
+
+        [Required]
+        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big blind must be positive.")]
+        public decimal? BigBlind { get; set; }
+
+        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Ante must be positive.")]
+        public decimal? Ante { get; set; } = 0;
+
+        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big Blind Ante must be positive.")]
+        public decimal? BigBlindAnte { get; set; } = 0;
+
+        [Required]
+        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]
+        public decimal? MyStack { get; set; }
+
+        public string? PlayerNotes { get; set; }
+
+        [Required]
+        public List<PotDto>? Pots { get; set; }
+
+        [Required]
+        public List<RoundDto>? Rounds { get; set; }
+
+        public List<VillainDto> Villains { get; set; } = [];
+
         public HandStepsDto() { }
 
         public HandStepsDto(Hand hand)
@@ -91,47 +132,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
             Rounds = rounds;
             Villains = villains;
         }
-
-        public string Name { get; set; } = "";
-
-        [Required]
-        [Range(0, 1, ErrorMessage = "Game style must be either 0 (tournament) or 1 (cash game).")]
-        public int? GameStyle { get; set; }
-
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Player count must be a positive integer.")]
-        public int? PlayerCount { get; set; }
-
-        [Required]
-        public int? Position { get; set; }
-
-        [Required]
-        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Small blind must be positive.")]
-        public decimal? SmallBlind { get; set; }
-
-        [Required]
-        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big blind must be positive.")]
-        public decimal? BigBlind { get; set; }
-
-        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Ante must be positive.")]
-        public decimal? Ante { get; set; } = 0;
-
-        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big Blind Ante must be positive.")]
-        public decimal? BigBlindAnte { get; set; } = 0;
-
-        [Required]
-        [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]
-        public decimal? MyStack { get; set; }
-
-        public string? PlayerNotes { get; set; }
-
-        [Required]
-        public List<PotDto>? Pots { get; set; }
-
-        [Required]
-        public List<RoundDto>? Rounds { get; set; }
-
-        public List<VillainDto> Villains { get; set; } = [];
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

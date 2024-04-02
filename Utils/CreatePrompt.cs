@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ai_poker_coach.Models.Domain;
 using ai_poker_coach.Models.DataTransferObjects;
+using ai_poker_coach.Models.Domain;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace ai_poker_coach.Utils
@@ -20,7 +20,8 @@ namespace ai_poker_coach.Utils
             pots.Clear();
             pots.Add((decimal)((body.Ante * body.PlayerCount) + body.BigBlindAnte)!);
 
-            string initial = $@"
+            string initial =
+                $@"
             Game style: {gameStyles[body.GameStyle ?? 0]}
             Players: {body.PlayerCount}
             Position relative to Small Blind (1) and Button({body.PlayerCount}): {body.Position}
@@ -39,7 +40,8 @@ namespace ai_poker_coach.Utils
 
             for (int i = 0; i < body.Rounds!.Count; i++)
             {
-                if (body.Rounds[i].Cards.Count == 0) break;
+                if (body.Rounds[i].Cards.Count == 0)
+                    break;
                 message += $"Dealer deals {deals[i]}: {ListCards(body.Rounds[i].Cards)}\n";
                 message += $"My CURRENT HAND is now: {body.Rounds[i].Evaluation.Value}\n";
                 message += GetActionMessages(body.Rounds[i].Actions, body.Position ?? 0);
@@ -48,16 +50,25 @@ namespace ai_poker_coach.Utils
 
             foreach (var villain in body.Villains)
             {
-                message += $"Player {villain.Cards[0].Player} shows down: {ListCards([villain.Cards[0], villain.Cards[1]])}\n";
+                message +=
+                    $"Player {villain.Cards[0].Player} shows down: {ListCards([villain.Cards[0], villain.Cards[1]])}\n";
                 message += $"Player {villain.Cards[0].Player}'s CURRENT HAND is: {villain.Evaluation.Value}\n";
             }
 
             for (int i = 0; i < body.Pots!.Count; i++)
             {
                 string potName = GetPotName(i);
-                message += $"Winner of the {potName} is " + string.Join(", ", body.Pots[i].Winner!.Split(",").Select(winner => "Player " + winner + (winner == body.Position.ToString() ? " (me)" : ""))) + "\n";
+                message +=
+                    $"Winner of the {potName} is "
+                    + string.Join(
+                        ", ",
+                        body.Pots[i]
+                            .Winner!.Split(",")
+                            .Select(winner => "Player " + winner + (winner == body.Position.ToString() ? " (me)" : ""))
+                    )
+                    + "\n";
             }
-            
+
             return message;
         }
 
@@ -69,27 +80,31 @@ namespace ai_poker_coach.Utils
 
         public static string ListCards(List<CardDto> cards)
         {
-            Dictionary<string, string> values = new() {
-                {"2", "Two"},
-                {"3", "Three"},
-                {"4", "Four"},
-                {"5", "Five"},
-                {"6", "Six"},
-                {"7", "Seven"},
-                {"8", "Eight"},
-                {"9", "Nine"},
-                {"T", "Ten"},
-                {"J", "Jack"},
-                {"Q", "Queen"},
-                {"K", "King"},
-                {"A", "Ace"},
-            };
-            Dictionary<string, string> suits = new() {
-                {"C", "Clubs"},
-                {"D", "Diamonds"},
-                {"H", "Hearts"},
-                {"S", "Spades"},
-            };
+            Dictionary<string, string> values =
+                new()
+                {
+                    { "2", "Two" },
+                    { "3", "Three" },
+                    { "4", "Four" },
+                    { "5", "Five" },
+                    { "6", "Six" },
+                    { "7", "Seven" },
+                    { "8", "Eight" },
+                    { "9", "Nine" },
+                    { "T", "Ten" },
+                    { "J", "Jack" },
+                    { "Q", "Queen" },
+                    { "K", "King" },
+                    { "A", "Ace" },
+                };
+            Dictionary<string, string> suits =
+                new()
+                {
+                    { "C", "Clubs" },
+                    { "D", "Diamonds" },
+                    { "H", "Hearts" },
+                    { "S", "Spades" },
+                };
 
             return string.Join(", ", cards.Select(card => $"{values[card.Value!]} of {suits[card.Suit!]}"));
         }
@@ -102,7 +117,8 @@ namespace ai_poker_coach.Utils
             foreach (var action in actions)
             {
                 string betSize = action.Decision > 1 ? $" {action.Bet}" : "";
-                addition += $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}.\n";
+                addition +=
+                    $"Player {action.Player}{(action.Player == myPosition ? " (me)" : "")} {decisions[action.Decision ?? 0]}{betSize}.\n";
             }
 
             return addition;
@@ -122,7 +138,8 @@ namespace ai_poker_coach.Utils
                     pots[(int)potAction.PotIndex!] += (decimal)potAction.Bet!;
                 }
 
-                addition += $"Player {potAction.Player}{(potAction.Player == myPosition ? " (me)" : "")} bets {potAction.Bet} into the {GetPotName(potAction.PotIndex ?? 0)}. The {GetPotName(potAction.PotIndex ?? 0)} total is now {pots[(int)potAction.PotIndex!]}.\n";
+                addition +=
+                    $"Player {potAction.Player}{(potAction.Player == myPosition ? " (me)" : "")} bets {potAction.Bet} into the {GetPotName(potAction.PotIndex ?? 0)}. The {GetPotName(potAction.PotIndex ?? 0)} total is now {pots[(int)potAction.PotIndex!]}.\n";
             }
 
             return addition;
@@ -142,5 +159,5 @@ namespace ai_poker_coach.Utils
 
             return name;
         }
-    }   
+    }
 }

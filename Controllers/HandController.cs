@@ -92,7 +92,10 @@ namespace ai_poker_coach.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred while analyzing data: {ex.Message}");
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    $"An error occurred while analyzing data: {ex.Message}"
+                );
             }
 
             return Ok(analysis);
@@ -106,136 +109,13 @@ namespace ai_poker_coach.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = _dbContext.ApplicationUsers.First(u => u.Id == body.ApplicationUserId);
+            var user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == body.ApplicationUserId);
             if (user == null)
             {
                 return NotFound($"User ID of {body.ApplicationUserId} does not exist.");
             }
 
-            Hand hand =
-                new()
-                {
-                    ApplicationUser = user,
-                    ApplicationUserId = body.ApplicationUserId!,
-                    Name = body.HandSteps!.Name,
-                    GameStyle = body.HandSteps.GameStyle ?? 0,
-                    PlayerCount = body.HandSteps.PlayerCount ?? 0,
-                    Position = body.HandSteps.Position ?? 0,
-                    SmallBlind = body.HandSteps.SmallBlind ?? 0,
-                    BigBlind = body.HandSteps.BigBlind ?? 0,
-                    Ante = body.HandSteps.Ante ?? 0,
-                    BigBlindAnte = body.HandSteps.BigBlindAnte ?? 0,
-                    MyStack = body.HandSteps.MyStack ?? 0,
-                    PlayerNotes = body.HandSteps.PlayerNotes!,
-                    Analysis = body.Analysis!,
-                };
-
-            ICollection<Pot> pots = body.HandSteps!.Pots!.Select(potDto => new Pot
-            {
-                Hand = hand,
-                HandId = hand.HandId,
-                PotIndex = potDto.PotIndex,
-                Winner = potDto.Winner!
-            })
-                .ToList();
-
-            ICollection<Card> cards = [];
-            ICollection<Evaluation> evaluations = [];
-            ICollection<Action> actions = [];
-            ICollection<PotAction> potActions = [];
-
-            foreach (var round in body.HandSteps!.Rounds!)
-            {
-                cards =
-                [
-                    ..cards,
-                    ..round.Cards.Select(cardDto => new Card {
-                    Hand = hand,
-                    HandId = hand.HandId,
-                    Step = cardDto.Step ?? 0,
-                    Player = cardDto.Player ?? 0,
-                    Value = cardDto.Value!,
-                    Suit = cardDto.Suit!,
-                })
-                ];
-
-                evaluations =
-                [
-                    ..evaluations,
-                    new Evaluation
-                    {
-                        Hand = hand,
-                        HandId = hand.HandId,
-                        Step = round.Evaluation.Step ?? 0,
-                        Player = round.Evaluation.Player ?? 0,
-                        Value = round.Evaluation.Value!
-                    }
-                ];
-
-                actions =
-                [
-                    ..actions,
-                    ..round.Actions.Select(actionDto => new Action {
-                    Hand = hand,
-                    HandId = hand.HandId,
-                    Step = actionDto.Step ?? 0,
-                    Player = actionDto.Player ?? 0,
-                    Decision = actionDto.Decision ?? 0,
-                    Bet = actionDto.Bet ?? 0,
-                })
-                ];
-
-                potActions =
-                [
-                    ..potActions,
-                    ..round.PotActions.Select(potActionDto => new PotAction {
-                    Hand = hand,
-                    HandId = hand.HandId,
-                    Step = potActionDto.Step ?? 0,
-                    Player = potActionDto.Player ?? 0,
-                    Pot = pots.ElementAt((int)potActionDto.PotIndex!),
-                    PotId = pots.ElementAt((int)potActionDto.PotIndex!).PotId,
-                    Bet = potActionDto.Bet ?? 0,
-                })
-                ];
-            }
-
-            foreach (var villain in body.HandSteps.Villains)
-            {
-                cards =
-                [
-                    ..cards,
-                    ..villain.Cards.Select(cardDto => new Card {
-                    Hand = hand,
-                    HandId = hand.HandId,
-                    Step = cardDto.Step ?? 0,
-                    Player = cardDto.Player ?? 0,
-                    Value = cardDto.Value!,
-                    Suit = cardDto.Suit!,
-                })
-                ];
-
-                evaluations =
-                [
-                    ..evaluations,
-                    new Evaluation
-                    {
-                        Hand = hand,
-                        HandId = hand.HandId,
-                        Step = villain.Evaluation.Step ?? 0,
-                        Player = villain.Evaluation.Player ?? 0,
-                        Value = villain.Evaluation.Value!
-                    }
-                ];
-            }
-
-            hand.Pots = pots;
-            hand.Cards = cards;
-            hand.Evaluations = evaluations;
-            hand.Actions = actions;
-            hand.PotActions = potActions;
-
-            user.Hands.Add(hand);
+            user.Hands.Add(new Hand(user, body));
 
             try
             {
@@ -252,24 +132,31 @@ namespace ai_poker_coach.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Database error occurred: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Database error occurred: {ex.Message}");
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            List<Hand> hands = await _dbContext
-                .Hands.Include(h => h.Pots)
-                .Include(h => h.Cards)
-                .Include(h => h.Evaluations)
-                .Include(h => h.Actions)
-                .Include(h => h.PotActions)
-                .ToListAsync();
+            try
+            {
+                List<Hand> hands = await _dbContext
+                    .Hands.Include(h => h.Pots)
+                    .Include(h => h.Cards)
+                    .Include(h => h.Evaluations)
+                    .Include(h => h.Actions)
+                    .Include(h => h.PotActions)
+                    .ToListAsync();
 
-            List<HandDto> handDtos = hands.Select(hand => new HandDto(hand)).ToList();
+                List<HandDto> handDtos = hands.Select(hand => new HandDto(hand)).ToList();
 
-            return Ok(handDtos);
+                return Ok(handDtos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
         }
     }
 }

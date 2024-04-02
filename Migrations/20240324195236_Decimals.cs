@@ -16,7 +16,8 @@ namespace ai_poker_coach.Migrations
                 type: "numeric",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "MyStack",
@@ -24,7 +25,8 @@ namespace ai_poker_coach.Migrations
                 type: "numeric",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "BigBlindAnte",
@@ -32,7 +34,8 @@ namespace ai_poker_coach.Migrations
                 type: "numeric",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "BigBlind",
@@ -40,7 +43,8 @@ namespace ai_poker_coach.Migrations
                 type: "numeric",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "Ante",
@@ -48,7 +52,8 @@ namespace ai_poker_coach.Migrations
                 type: "numeric",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "Bet",
@@ -56,7 +61,8 @@ namespace ai_poker_coach.Migrations
                 type: "numeric",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "integer");
+                oldType: "integer"
+            );
         }
 
         /// <inheritdoc />
@@ -68,7 +74,8 @@ namespace ai_poker_coach.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric");
+                oldType: "numeric"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MyStack",
@@ -76,7 +83,8 @@ namespace ai_poker_coach.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric");
+                oldType: "numeric"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "BigBlindAnte",
@@ -84,7 +92,8 @@ namespace ai_poker_coach.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric");
+                oldType: "numeric"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "BigBlind",
@@ -92,7 +101,8 @@ namespace ai_poker_coach.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric");
+                oldType: "numeric"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Ante",
@@ -100,7 +110,8 @@ namespace ai_poker_coach.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric");
+                oldType: "numeric"
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "Bet",
@@ -108,7 +119,8 @@ namespace ai_poker_coach.Migrations
                 type: "integer",
                 nullable: false,
                 oldClrType: typeof(decimal),
-                oldType: "numeric");
+                oldType: "numeric"
+            );
         }
     }
 }

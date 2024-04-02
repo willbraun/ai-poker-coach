@@ -15,8 +15,12 @@ namespace ai_poker_coach.Migrations
                 name: "Hand",
                 columns: table => new
                 {
-                    HandId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    HandId = table
+                        .Column<int>(type: "integer", nullable: false)
+                        .Annotation(
+                            "Npgsql:ValueGenerationStrategy",
+                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                        ),
                     Name = table.Column<string>(type: "text", nullable: true),
                     GameStyle = table.Column<int>(type: "integer", nullable: false),
                     PlayerCount = table.Column<int>(type: "integer", nullable: false),
@@ -39,15 +43,21 @@ namespace ai_poker_coach.Migrations
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Action",
                 columns: table => new
                 {
-                    ActionId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ActionId = table
+                        .Column<int>(type: "integer", nullable: false)
+                        .Annotation(
+                            "Npgsql:ValueGenerationStrategy",
+                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                        ),
                     Decision = table.Column<int>(type: "integer", nullable: false),
                     Bet = table.Column<int>(type: "integer", nullable: false),
                     HandId = table.Column<int>(type: "integer", nullable: false),
@@ -62,15 +72,21 @@ namespace ai_poker_coach.Migrations
                         column: x => x.HandId,
                         principalTable: "Hand",
                         principalColumn: "HandId",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Card",
                 columns: table => new
                 {
-                    CardId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CardId = table
+                        .Column<int>(type: "integer", nullable: false)
+                        .Annotation(
+                            "Npgsql:ValueGenerationStrategy",
+                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                        ),
                     Value = table.Column<string>(type: "text", nullable: true),
                     Suit = table.Column<string>(type: "text", nullable: true),
                     HandId = table.Column<int>(type: "integer", nullable: false),
@@ -85,36 +101,26 @@ namespace ai_poker_coach.Migrations
                         column: x => x.HandId,
                         principalTable: "Hand",
                         principalColumn: "HandId",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Action_HandId",
-                table: "Action",
-                column: "HandId");
+            migrationBuilder.CreateIndex(name: "IX_Action_HandId", table: "Action", column: "HandId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Card_HandId",
-                table: "Card",
-                column: "HandId");
+            migrationBuilder.CreateIndex(name: "IX_Card_HandId", table: "Card", column: "HandId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Hand_ApplicationUserId",
-                table: "Hand",
-                column: "ApplicationUserId");
+            migrationBuilder.CreateIndex(name: "IX_Hand_ApplicationUserId", table: "Hand", column: "ApplicationUserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Action");
+            migrationBuilder.DropTable(name: "Action");
 
-            migrationBuilder.DropTable(
-                name: "Card");
+            migrationBuilder.DropTable(name: "Card");
 
-            migrationBuilder.DropTable(
-                name: "Hand");
+            migrationBuilder.DropTable(name: "Hand");
         }
     }
 }

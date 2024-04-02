@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using ai_poker_coach.Models.DataTransferObjects;
 
 namespace ai_poker_coach.Models.Domain
 {
@@ -19,5 +20,17 @@ namespace ai_poker_coach.Models.Domain
         public Hand Hand { get; set; } = new();
         public int Step { get; set; }
         public int Player { get; set; }
+
+        public Card() { }
+
+        public Card(Hand hand, CardDto cardDto)
+        {
+            Hand = hand;
+            HandId = hand.HandId;
+            Step = cardDto.Step ?? 0;
+            Player = cardDto.Player ?? 0;
+            Value = cardDto.Value!;
+            Suit = cardDto.Suit!;
+        }
     }
 }

@@ -15,15 +15,14 @@ namespace ai_poker_coach.Migrations
                 table: "Action",
                 type: "numeric",
                 nullable: false,
-                defaultValue: 0m);
+                defaultValue: 0m
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Pot",
-                table: "Action");
+            migrationBuilder.DropColumn(name: "Pot", table: "Action");
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
     {
         [Required]
         public int? Step { get; set; }
-        
+
         [Required]
         public int? Player { get; set; }
     }
