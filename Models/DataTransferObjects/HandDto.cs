@@ -10,6 +10,16 @@ namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class HandDto : IValidatableObject
     {
+        public HandDto() { }
+
+        public HandDto(Hand hand)
+            : this()
+        {
+            ApplicationUserId = hand.ApplicationUserId;
+            HandSteps = new HandStepsDto(hand);
+            Analysis = hand.Analysis;
+        }
+
         [Required]
         public string? ApplicationUserId { get; set; }
 

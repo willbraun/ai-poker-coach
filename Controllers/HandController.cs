@@ -259,99 +259,6 @@ namespace ai_poker_coach.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            static HandDto getHandDto(Hand hand)
-            {
-                static (List<RoundDto>, List<VillainDto>) getDtos(Hand hand)
-                {
-                    List<RoundDto> rounds = [new RoundDto()];
-                    List<VillainDto> villains = [];
-                    List<IHandStep> unsortedSteps =
-                    [
-                        ..hand.Cards,
-                        ..hand.Evaluations,
-                        ..hand.Actions,
-                        ..hand.PotActions
-                    ];
-                    List<IHandStep> steps = [..unsortedSteps.OrderBy(step => step.Step)];
-
-                    foreach (var step in steps.Select((data, i) => new { data, i }))
-                    {
-                        if (step.data is Card card)
-                        {
-                            if (card.Player == 0 && steps[step.i - 1] is not Card)
-                            {
-                                rounds.Add(new RoundDto());
-                            }
-
-                            if (card.Player != 0 && card.Player != hand.Position && steps[step.i - 1] is not Card)
-                            {
-                                villains.Add(new VillainDto());
-                            }
-
-                            if (villains.Count == 0)
-                            {
-                                rounds.Last().Cards.Add(new CardDto(card));
-                            }
-                            else
-                            {
-                                villains.Last().Cards.Add(new CardDto(card));
-                            }
-                        }
-
-                        if (step.data is Evaluation evaluation)
-                        {
-                            if (villains.Count == 0)
-                            {
-                                rounds.Last().Evaluation = new EvaluationDto(evaluation);
-                            }
-                            else
-                            {
-                                villains.Last().Evaluation = new EvaluationDto(evaluation);
-                            }
-                        }
-
-                        if (step.data is Action action)
-                        {
-                            rounds.Last().Actions.Add(new ActionDto(action));
-                        }
-
-                        if (step.data is PotAction potAction)
-                        {
-                            rounds.Last().PotActions.Add(new PotActionDto(potAction));
-                        }
-                    }
-
-                    return (rounds, villains);
-                }
-
-                (List<RoundDto> rounds, List<VillainDto> villains) = getDtos(hand);
-
-                return new HandDto()
-                {
-                    ApplicationUserId = hand.ApplicationUserId,
-                    HandSteps = new HandStepsDto()
-                    {
-                        Name = hand.Name,
-                        GameStyle = hand.GameStyle,
-                        PlayerCount = hand.PlayerCount,
-                        Position = hand.Position,
-                        SmallBlind = hand.SmallBlind,
-                        BigBlind = hand.BigBlind,
-                        Ante = hand.Ante,
-                        BigBlindAnte = hand.BigBlindAnte,
-                        MyStack = hand.MyStack,
-                        PlayerNotes = hand.PlayerNotes,
-                        Pots = hand
-                            .Pots.Select((pot, index) => new { pot, index })
-                            .Select(inner => new PotDto() { PotIndex = inner.index, Winner = inner.pot.Winner })
-                            .ToList(),
-                        Rounds = rounds,
-                        Villains = villains
-                    },
-                    Analysis = hand.Analysis
-                };
-            }
-
             List<Hand> hands = await _dbContext
                 .Hands.Include(h => h.Pots)
                 .Include(h => h.Cards)
@@ -360,7 +267,7 @@ namespace ai_poker_coach.Controllers
                 .Include(h => h.PotActions)
                 .ToListAsync();
 
-            List<HandDto> handDtos = hands.Select(hand => getHandDto(hand)).ToList();
+            List<HandDto> handDtos = hands.Select(hand => new HandDto(hand)).ToList();
 
             return Ok(handDtos);
         }

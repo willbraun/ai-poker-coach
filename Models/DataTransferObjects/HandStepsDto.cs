@@ -4,11 +4,94 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using ai_poker_coach.Models.Domain;
+using Action = ai_poker_coach.Models.Domain.Action;
 
 namespace ai_poker_coach.Models.DataTransferObjects
 {
     public class HandStepsDto : IValidatableObject
     {
+        public HandStepsDto() { }
+
+        public HandStepsDto(Hand hand)
+            : this()
+        {
+            static (List<RoundDto>, List<VillainDto>) getDtos(Hand hand)
+            {
+                List<RoundDto> rounds = [new RoundDto()];
+                List<VillainDto> villains = [];
+                List<IHandStep> unsortedSteps = [..hand.Cards, ..hand.Evaluations, ..hand.Actions, ..hand.PotActions];
+                List<IHandStep> steps = [..unsortedSteps.OrderBy(step => step.Step)];
+
+                foreach (var step in steps.Select((data, i) => new { data, i }))
+                {
+                    if (step.data is Card card)
+                    {
+                        if (card.Player == 0 && steps[step.i - 1] is not Card)
+                        {
+                            rounds.Add(new RoundDto());
+                        }
+
+                        if (card.Player != 0 && card.Player != hand.Position && steps[step.i - 1] is not Card)
+                        {
+                            villains.Add(new VillainDto());
+                        }
+
+                        if (villains.Count == 0)
+                        {
+                            rounds.Last().Cards.Add(new CardDto(card));
+                        }
+                        else
+                        {
+                            villains.Last().Cards.Add(new CardDto(card));
+                        }
+                    }
+
+                    if (step.data is Evaluation evaluation)
+                    {
+                        if (villains.Count == 0)
+                        {
+                            rounds.Last().Evaluation = new EvaluationDto(evaluation);
+                        }
+                        else
+                        {
+                            villains.Last().Evaluation = new EvaluationDto(evaluation);
+                        }
+                    }
+
+                    if (step.data is Action action)
+                    {
+                        rounds.Last().Actions.Add(new ActionDto(action));
+                    }
+
+                    if (step.data is PotAction potAction)
+                    {
+                        rounds.Last().PotActions.Add(new PotActionDto(potAction));
+                    }
+                }
+
+                return (rounds, villains);
+            }
+
+            (List<RoundDto> rounds, List<VillainDto> villains) = getDtos(hand);
+
+            Name = hand.Name;
+            GameStyle = hand.GameStyle;
+            PlayerCount = hand.PlayerCount;
+            Position = hand.Position;
+            SmallBlind = hand.SmallBlind;
+            BigBlind = hand.BigBlind;
+            Ante = hand.Ante;
+            BigBlindAnte = hand.BigBlindAnte;
+            MyStack = hand.MyStack;
+            PlayerNotes = hand.PlayerNotes;
+            Pots = hand
+                .Pots.Select((pot, index) => new { pot, index })
+                .Select(inner => new PotDto() { PotIndex = inner.index, Winner = inner.pot.Winner })
+                .ToList();
+            Rounds = rounds;
+            Villains = villains;
+        }
+
         public string Name { get; set; } = "";
 
         [Required]
