@@ -28,7 +28,7 @@ namespace ai_poker_coach.Models.Domain
         public ICollection<Action> Actions { get; set; } = [];
         public ICollection<PotAction> PotActions { get; set; } = [];
         public string Analysis { get; set; } = "";
-        public DateTime CreatedTime { get; }
+        public DateTime CreatedTime { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; } = "";

@@ -137,18 +137,30 @@ namespace ai_poker_coach.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string? userId = null)
         {
             try
             {
-                List<Hand> hands = await _dbContext
+                IQueryable<Hand> query = _dbContext
                     .Hands.Include(h => h.Pots)
                     .Include(h => h.Cards)
                     .Include(h => h.Evaluations)
                     .Include(h => h.Actions)
                     .Include(h => h.PotActions)
-                    .ToListAsync();
+                    .OrderByDescending(h => h.CreatedTime);
 
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    var user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == userId);
+                    if (user == null)
+                    {
+                        return NotFound($"User ID of \"{userId}\" does not exist.");
+                    }
+
+                    query = query.Where(hand => hand.ApplicationUserId == userId);
+                }
+
+                List<Hand> hands = await query.ToListAsync();
                 List<HandDto> handDtos = hands.Select(hand => new HandDto(hand)).ToList();
 
                 return Ok(handDtos);

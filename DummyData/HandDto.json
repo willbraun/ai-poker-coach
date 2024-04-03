@@ -11,7 +11,12 @@
 		"bigBlindAnte": 0,
 		"myStack": 180,
 		"playerNotes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 7. Other players seem pretty conservative.",
-		"winners": "7",
+		"pots": [
+			{
+				"potIndex": 0,
+				"winner": "7"
+			}
+		],
 		"rounds": [
 			{
 				"cards": [
@@ -36,192 +41,250 @@
 				"actions": [
 					{
 						"step": 4,
-						"player": 3,
+						"player": 1,
 						"decision": 3,
-						"bet": 15,
-						"pot": 19
+						"bet": 1
 					},
 					{
 						"step": 5,
-						"player": 4,
-						"decision": 2,
-						"bet": 15,
-						"pot": 34
+						"player": 2,
+						"decision": 3,
+						"bet": 3
 					},
 					{
 						"step": 6,
-						"player": 5,
-						"decision": 0,
-						"bet": 0,
-						"pot": 34
+						"player": 3,
+						"decision": 3,
+						"bet": 15
 					},
 					{
 						"step": 7,
-						"player": 6,
-						"decision": 0,
-						"bet": 0,
-						"pot": 34
+						"player": 4,
+						"decision": 2,
+						"bet": 15
 					},
 					{
 						"step": 8,
-						"player": 7,
-						"decision": 2,
-						"bet": 15,
-						"pot": 49
+						"player": 5,
+						"decision": 0,
+						"bet": 0
 					},
 					{
 						"step": 9,
-						"player": 8,
+						"player": 6,
 						"decision": 0,
-						"bet": 0,
-						"pot": 49
+						"bet": 0
 					},
 					{
 						"step": 10,
-						"player": 1,
-						"decision": 0,
-						"bet": 0,
-						"pot": 49
+						"player": 7,
+						"decision": 2,
+						"bet": 15
 					},
 					{
 						"step": 11,
+						"player": 8,
+						"decision": 0,
+						"bet": 0
+					},
+					{
+						"step": 12,
+						"player": 1,
+						"decision": 0,
+						"bet": 0
+					},
+					{
+						"step": 13,
 						"player": 2,
 						"decision": 0,
-						"bet": 0,
-						"pot": 49
+						"bet": 0
+					}
+				],
+				"potActions": [
+					{
+						"step": 14,
+						"player": 1,
+						"potIndex": 0,
+						"bet": 1
+					},
+					{
+						"step": 15,
+						"player": 2,
+						"potIndex": 0,
+						"bet": 3
+					},
+					{
+						"step": 16,
+						"player": 3,
+						"potIndex": 0,
+						"bet": 15
+					},
+					{
+						"step": 17,
+						"player": 4,
+						"potIndex": 0,
+						"bet": 15
+					},
+					{
+						"step": 18,
+						"player": 7,
+						"potIndex": 0,
+						"bet": 15
 					}
 				]
 			},
 			{
 				"cards": [
 					{
-						"step": 12,
+						"step": 19,
 						"player": 0,
 						"value": "K",
 						"suit": "D"
 					},
 					{
-						"step": 13,
+						"step": 20,
 						"player": 0,
 						"value": "Q",
 						"suit": "H"
 					},
 					{
-						"step": 14,
+						"step": 21,
 						"player": 0,
 						"value": "3",
 						"suit": "S"
 					}
 				],
 				"evaluation": {
-					"step": 15,
+					"step": 22,
 					"player": 4,
 					"value": "Two Pair, Kings and Threes"
 				},
 				"actions": [
 					{
-						"step": 16,
+						"step": 23,
 						"player": 3,
 						"decision": 1,
-						"bet": 0,
-						"pot": 49
+						"bet": 0
 					},
 					{
-						"step": 17,
+						"step": 24,
 						"player": 4,
 						"decision": 3,
-						"bet": 35,
-						"pot": 84
+						"bet": 35
 					},
 					{
-						"step": 18,
+						"step": 25,
 						"player": 7,
 						"decision": 2,
-						"bet": 35,
-						"pot": 119
+						"bet": 35
 					},
 					{
-						"step": 19,
+						"step": 26,
 						"player": 3,
 						"decision": 0,
-						"bet": 0,
-						"pot": 119
+						"bet": 0
+					}
+				],
+				"potActions": [
+					{
+						"step": 27,
+						"player": 4,
+						"potIndex": 0,
+						"bet": 35
+					},
+					{
+						"step": 28,
+						"player": 7,
+						"potIndex": 0,
+						"bet": 35
 					}
 				]
 			},
 			{
 				"cards": [
 					{
-						"step": 20,
+						"step": 29,
 						"player": 0,
 						"value": "8",
 						"suit": "S"
 					}
 				],
 				"evaluation": {
-					"step": 21,
+					"step": 30,
 					"player": 4,
 					"value": "Two Pair, Kings and Threes"
 				},
 				"actions": [
 					{
-						"step": 22,
+						"step": 31,
 						"player": 4,
 						"decision": 1,
-						"bet": 0,
-						"pot": 119
+						"bet": 0
 					},
 					{
-						"step": 23,
+						"step": 32,
 						"player": 7,
 						"decision": 4,
-						"bet": 130,
-						"pot": 249
+						"bet": 130
 					},
 					{
-						"step": 24,
+						"step": 33,
 						"player": 4,
 						"decision": 5,
-						"bet": 130,
-						"pot": 379
+						"bet": 130
+					}
+				],
+				"potActions": [
+					{
+						"step": 34,
+						"player": 4,
+						"potIndex": 0,
+						"bet": 130
+					},
+					{
+						"step": 35,
+						"player": 7,
+						"potIndex": 0,
+						"bet": 130
 					}
 				]
 			},
 			{
 				"cards": [
 					{
-						"step": 25,
+						"step": 36,
 						"player": 0,
 						"value": "4",
 						"suit": "D"
 					}
 				],
 				"evaluation": {
-					"step": 26,
+					"step": 37,
 					"player": 4,
 					"value": "Two Pair, Kings and Threes"
 				},
-				"actions": []
+				"actions": [],
+				"potActions": []
 			}
 		],
 		"villains": [
 			{
 				"cards": [
 					{
-						"step": 27,
+						"step": 38,
 						"player": 7,
 						"value": "Q",
 						"suit": "D"
 					},
 					{
-						"step": 28,
+						"step": 39,
 						"player": 7,
 						"value": "Q",
 						"suit": "S"
 					}
 				],
 				"evaluation": {
-					"step": 29,
+					"step": 40,
 					"player": 7,
 					"value": "Three of a Kind, Queens"
 				}
