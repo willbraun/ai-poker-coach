@@ -170,5 +170,48 @@ namespace ai_poker_coach.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int handId)
+        {
+            if (handId == 0)
+            {
+                return BadRequest("Hand ID is required.");
+            }
+
+            var hand = await _dbContext.Hands.FirstOrDefaultAsync(h => h.HandId == handId);
+            if (hand == null)
+            {
+                return NotFound($"Hand ID of \"{handId}\" does not exist.");
+            }
+
+            var user = await _dbContext
+                .ApplicationUsers.Include(u => u.Hands)
+                .FirstOrDefaultAsync(u => u.Hands.Any(h => h.HandId == handId));
+            if (user == null)
+            {
+                return NotFound($"No user associated with hand ID of \"{handId}\".");
+            }
+
+            user.Hands.Remove(hand);
+
+            try
+            {
+                int rowsAffected = await _dbContext.SaveChangesAsync();
+
+                if (rowsAffected > 0)
+                {
+                    return Ok("Successfully deleted hand");
+                }
+                else
+                {
+                    return BadRequest("Failed to delete hand");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Database error occurred: {ex.Message}");
+            }
+        }
     }
 }
