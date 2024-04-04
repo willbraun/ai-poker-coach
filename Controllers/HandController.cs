@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using ai_poker_coach.Models.DataTransferObjects;
 using ai_poker_coach.Models.Domain;
@@ -108,6 +109,12 @@ namespace ai_poker_coach.Controllers
                 return NotFound($"User ID of {body.ApplicationUserId} does not exist.");
             }
 
+            string? authenticatedUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (authenticatedUserId != user.Id)
+            {
+                return BadRequest($"You may only add hands to your own account (ID: {authenticatedUserId})");
+            }
+
             user.Hands.Add(new Hand(user, body));
 
             try
@@ -184,6 +191,12 @@ namespace ai_poker_coach.Controllers
             if (user == null)
             {
                 return NotFound($"No user associated with hand ID of \"{handId}\".");
+            }
+
+            string? authenticatedUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (authenticatedUserId != user.Id)
+            {
+                return BadRequest($"You may only delete hands from your own account (ID: {authenticatedUserId})");
             }
 
             user.Hands.Remove(hand);
