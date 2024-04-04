@@ -1,8 +1,6 @@
 using ai_poker_coach.Models.Domain;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Action = ai_poker_coach.Models.Domain.Action;
 
 namespace DotNet8Authentication.Data
 {

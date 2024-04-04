@@ -1,24 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using ai_poker_coach.Models.DataTransferObjects;
 using ai_poker_coach.Models.Domain;
 using DotNet8Authentication.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Net.Http.Headers;
-using Microsoft.VisualBasic;
 using static ai_poker_coach.Utils.PromptUtils;
-using Action = ai_poker_coach.Models.Domain.Action;
 
 namespace ai_poker_coach.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class HandController : ControllerBase
     {

@@ -2,23 +2,36 @@ using System.Text.Json.Serialization;
 using ai_poker_coach.Models.Domain;
 using DotNet8Authentication.Data;
 using DotNetEnv;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsDevelopment())
 {
-    DotNetEnv.Env.Load();
+    Env.Load();
 }
 else if (builder.Environment.IsProduction())
 {
-    DotNetEnv.Env.Load("/home/will/ai-poker-coach/.env");
+    Env.Load("/home/will/ai-poker-coach/.env");
 }
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(
+        "oauth2",
+        new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        }
+    );
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 
 builder.Services.AddDbContext<IdentityDataContext>(options =>
 {
@@ -46,6 +59,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapIdentityApi<ApplicationUser>();
+
+app.UseAuthentication();
 
 app.MapControllers();
 
