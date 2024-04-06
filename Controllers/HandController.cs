@@ -115,7 +115,8 @@ namespace ai_poker_coach.Controllers
                 return BadRequest($"You may only add hands to your own account (ID: {authenticatedUserId})");
             }
 
-            user.Hands.Add(new Hand(user, body));
+            var hand = new Hand(user, body);
+            user.Hands.Add(hand);
 
             try
             {
@@ -123,7 +124,7 @@ namespace ai_poker_coach.Controllers
 
                 if (rowsAffected > 0)
                 {
-                    return Ok("Successfully added hand");
+                    return Ok(hand);
                 }
                 else
                 {
@@ -164,6 +165,34 @@ namespace ai_poker_coach.Controllers
                 List<HandDto> handDtos = hands.Select(hand => new HandDto(hand)).ToList();
 
                 return Ok(handDtos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var hand = await _dbContext
+                    .Hands.Include(h => h.Pots)
+                    .Include(h => h.Cards)
+                    .Include(h => h.Evaluations)
+                    .Include(h => h.Actions)
+                    .Include(h => h.PotActions)
+                    .FirstOrDefaultAsync(hand => hand.HandId == id);
+
+                if (hand == null)
+                {
+                    return NotFound($"Hand ID of \"{id}\" does not exist.");
+                }
+
+                var handDto = new HandDto(hand);
+
+                return Ok(handDto);
             }
             catch (Exception ex)
             {
