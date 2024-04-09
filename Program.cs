@@ -83,7 +83,7 @@ app.MapPost(
             var user = await userManager.FindByEmailAsync(requestBody.Email);
             if (user == null)
             {
-                return Results.Unauthorized();
+                return TypedResults.Unauthorized();
             }
 
             using var httpClient = new HttpClient();
@@ -95,17 +95,17 @@ app.MapPost(
                 string responseBody = await response.Content.ReadAsStringAsync();
                 var responseObject = JsonSerializer.Deserialize<LoginInnerResponseDto>(responseBody);
 
-                return Results.Ok(new LoginResponseDto(user, responseObject!));
+                return TypedResults.Ok(new LoginResponseDto(user, responseObject!));
             }
             catch (HttpRequestException ex)
             {
                 if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    return Results.Unauthorized();
+                    return TypedResults.Unauthorized();
                 }
                 else
                 {
-                    return Results.StatusCode(Convert.ToInt32(ex.StatusCode));
+                    return TypedResults.StatusCode(Convert.ToInt32(ex.StatusCode));
                 }
             }
         }
