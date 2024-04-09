@@ -1,6 +1,8 @@
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ai_poker_coach.Models.DataTransferObjects;
+using ai_poker_coach.Models.DataTransferObjects.Authentication;
 using ai_poker_coach.Models.Domain;
 using DotNet8Authentication.Data;
 using DotNetEnv;
@@ -78,7 +80,7 @@ app.MapIdentityApi<ApplicationUser>();
 
 app.MapPost(
         "/customLogin",
-        async Task<IResult> (LoginRequestDto requestBody, UserManager<ApplicationUser> userManager) =>
+        async Task<IResult> (AuthRequestDto requestBody, UserManager<ApplicationUser> userManager) =>
         {
             var user = await userManager.FindByEmailAsync(requestBody.Email);
             if (user == null)
@@ -105,8 +107,56 @@ app.MapPost(
                 }
                 else
                 {
-                    return TypedResults.StatusCode(Convert.ToInt32(ex.StatusCode));
+                    return TypedResults.UnprocessableEntity($"Login error: {ex.StatusCode} - {ex.Message}");
                 }
+            }
+        }
+    )
+    .AllowAnonymous();
+
+app.MapPost(
+        "/customRegister",
+        async Task<IResult> (AuthRequestDto requestBody, UserManager<ApplicationUser> userManager) =>
+        {
+            var user = await userManager.FindByEmailAsync(requestBody.Email);
+            if (user != null)
+            {
+                return TypedResults.Conflict("Email already exists");
+            }
+
+            using var httpClient = new HttpClient();
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync($"http://localhost:{port}/register", requestBody);
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var responseObject = JsonSerializer.Deserialize<RegisterInnerResponseDto>(responseBody);
+                    return TypedResults.BadRequest(responseObject);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                return TypedResults.BadRequest(ex.Message);
+            }
+
+            try
+            {
+                var newUser = await userManager.FindByEmailAsync(requestBody.Email);
+
+                var loginResponse = await httpClient.PostAsJsonAsync($"http://localhost:{port}/login", requestBody);
+                loginResponse.EnsureSuccessStatusCode();
+
+                string loginResponseBody = await loginResponse.Content.ReadAsStringAsync();
+                var loginResponseObject = JsonSerializer.Deserialize<LoginInnerResponseDto>(loginResponseBody);
+
+                return TypedResults.Ok(new LoginResponseDto(newUser!, loginResponseObject!));
+            }
+            catch (HttpRequestException ex)
+            {
+                return TypedResults.UnprocessableEntity(
+                    $"Account successfully created, but there was a problem logging in: {ex.StatusCode} - {ex.Message}"
+                );
             }
         }
     )
