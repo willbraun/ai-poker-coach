@@ -12,7 +12,6 @@ using static ai_poker_coach.Utils.PromptUtils;
 namespace ai_poker_coach.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
     public class HandController : ControllerBase
     {
@@ -27,6 +26,7 @@ namespace ai_poker_coach.Controllers
         }
 
         [HttpPost("analyze")]
+        [Authorize]
         public async Task<IActionResult> Analyze([FromBody] HandStepsDto body)
         {
             if (!ModelState.IsValid)
@@ -96,6 +96,7 @@ namespace ai_poker_coach.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] HandDto body)
         {
             if (!ModelState.IsValid)
@@ -201,6 +202,7 @@ namespace ai_poker_coach.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> Delete(int handId)
         {
             if (handId == 0)

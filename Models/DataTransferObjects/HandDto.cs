@@ -9,6 +9,9 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public string? ApplicationUserId { get; set; }
 
         [Required]
+        public int? HandId { get; set; }
+
+        [Required]
         public HandStepsDto? HandSteps { get; set; }
 
         [Required]
@@ -20,6 +23,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
             : this()
         {
             ApplicationUserId = hand.ApplicationUserId;
+            HandId = hand.HandId;
             HandSteps = new HandStepsDto(hand);
             Analysis = hand.Analysis;
         }
