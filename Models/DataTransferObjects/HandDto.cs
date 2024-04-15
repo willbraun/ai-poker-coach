@@ -17,6 +17,8 @@ namespace ai_poker_coach.Models.DataTransferObjects
         [Required]
         public string? Analysis { get; set; }
 
+        public DateTime? CreatedTime { get; set; }
+
         public HandDto() { }
 
         public HandDto(Hand hand)
@@ -26,6 +28,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
             HandId = hand.HandId;
             HandSteps = new HandStepsDto(hand);
             Analysis = hand.Analysis;
+            CreatedTime = hand.CreatedTime;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
