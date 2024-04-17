@@ -12,7 +12,7 @@ namespace ai_poker_coach.Models.Domain
         public decimal Bet { get; set; }
 
         [ForeignKey("Hand")]
-        public int HandId { get; set; }
+        public string HandId { get; set; } = "";
         public Hand Hand { get; set; } = new();
         public int Step { get; set; }
         public int Player { get; set; }
@@ -22,7 +22,7 @@ namespace ai_poker_coach.Models.Domain
         public Action(Hand hand, ActionDto actionDto)
         {
             Hand = hand;
-            HandId = hand.HandId;
+            HandId = hand.Id;
             Step = actionDto.Step ?? 0;
             Player = actionDto.Player ?? 0;
             Decision = actionDto.Decision ?? 0;

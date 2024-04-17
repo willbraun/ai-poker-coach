@@ -3,13 +3,10 @@ using ai_poker_coach.Models.Domain;
 
 namespace ai_poker_coach.Models.DataTransferObjects
 {
-    public class HandDto : IValidatableObject
+    public class HandInputDto : IValidatableObject
     {
         [Required]
         public string? ApplicationUserId { get; set; }
-
-        [Required]
-        public int? HandId { get; set; }
 
         [Required]
         public HandStepsDto? HandSteps { get; set; }
@@ -17,18 +14,14 @@ namespace ai_poker_coach.Models.DataTransferObjects
         [Required]
         public string? Analysis { get; set; }
 
-        public DateTime? CreatedTime { get; set; }
+        public HandInputDto() { }
 
-        public HandDto() { }
-
-        public HandDto(Hand hand)
+        public HandInputDto(Hand hand)
             : this()
         {
             ApplicationUserId = hand.ApplicationUserId;
-            HandId = hand.HandId;
             HandSteps = new HandStepsDto(hand);
             Analysis = hand.Analysis;
-            CreatedTime = hand.CreatedTime;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

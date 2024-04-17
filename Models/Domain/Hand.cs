@@ -7,7 +7,7 @@ namespace ai_poker_coach.Models.Domain
     public class Hand
     {
         [Key]
-        public int HandId { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = "";
         public int GameStyle { get; set; }
         public int PlayerCount { get; set; }
@@ -24,46 +24,45 @@ namespace ai_poker_coach.Models.Domain
         public ICollection<Action> Actions { get; set; } = [];
         public ICollection<PotAction> PotActions { get; set; } = [];
         public string Analysis { get; set; } = "";
-        public DateTime CreatedTime { get; set; }
+        public DateTime CreatedTime { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; } = "";
         public ApplicationUser ApplicationUser { get; set; } = new();
 
-        public Hand()
-        {
-            CreatedTime = DateTime.UtcNow;
-        }
+        public Hand() { }
 
-        public Hand(ApplicationUser user, HandDto handDto)
+        public Hand(ApplicationUser user, HandInputDto handInputDto)
         {
-            if (user.Id != handDto.ApplicationUserId)
+            if (user.Id != handInputDto.ApplicationUserId)
             {
-                throw new Exception($"User ID {user.Id} does not match Hand DTO user ID {handDto.ApplicationUserId}");
+                throw new Exception(
+                    $"User ID {user.Id} does not match Hand DTO user ID {handInputDto.ApplicationUserId}"
+                );
             }
 
             ApplicationUser = user;
             ApplicationUserId = user.Id!;
-            Name = handDto.HandSteps!.Name;
-            GameStyle = handDto.HandSteps.GameStyle ?? 0;
-            PlayerCount = handDto.HandSteps.PlayerCount ?? 0;
-            Position = handDto.HandSteps.Position ?? 0;
-            SmallBlind = handDto.HandSteps.SmallBlind ?? 0;
-            BigBlind = handDto.HandSteps.BigBlind ?? 0;
-            Ante = handDto.HandSteps.Ante ?? 0;
-            BigBlindAnte = handDto.HandSteps.BigBlindAnte ?? 0;
-            MyStack = handDto.HandSteps.MyStack ?? 0;
-            PlayerNotes = handDto.HandSteps.PlayerNotes!;
-            Analysis = handDto.Analysis!;
+            Name = handInputDto.HandSteps!.Name;
+            GameStyle = handInputDto.HandSteps.GameStyle ?? 0;
+            PlayerCount = handInputDto.HandSteps.PlayerCount ?? 0;
+            Position = handInputDto.HandSteps.Position ?? 0;
+            SmallBlind = handInputDto.HandSteps.SmallBlind ?? 0;
+            BigBlind = handInputDto.HandSteps.BigBlind ?? 0;
+            Ante = handInputDto.HandSteps.Ante ?? 0;
+            BigBlindAnte = handInputDto.HandSteps.BigBlindAnte ?? 0;
+            MyStack = handInputDto.HandSteps.MyStack ?? 0;
+            PlayerNotes = handInputDto.HandSteps.PlayerNotes!;
+            Analysis = handInputDto.Analysis!;
 
-            Pots = handDto.HandSteps!.Pots!.Select(potDto => new Pot(this, potDto)).ToList();
+            Pots = handInputDto.HandSteps!.Pots!.Select(potDto => new Pot(this, potDto)).ToList();
 
             ICollection<Card> cards = [];
             ICollection<Evaluation> evaluations = [];
             ICollection<Action> actions = [];
             ICollection<PotAction> potActions = [];
 
-            foreach (var round in handDto.HandSteps!.Rounds!)
+            foreach (var round in handInputDto.HandSteps!.Rounds!)
             {
                 cards = [..cards, ..round.Cards.Select(cardDto => new Card(this, cardDto))];
                 evaluations = [..evaluations, new Evaluation(this, round.Evaluation)];
@@ -75,7 +74,7 @@ namespace ai_poker_coach.Models.Domain
                 ];
             }
 
-            foreach (var villain in handDto.HandSteps.Villains)
+            foreach (var villain in handInputDto.HandSteps.Villains)
             {
                 cards = [..cards, ..villain.Cards.Select(cardDto => new Card(this, cardDto))];
                 evaluations = [..evaluations, new Evaluation(this, villain.Evaluation)];
@@ -85,7 +84,6 @@ namespace ai_poker_coach.Models.Domain
             Evaluations = evaluations;
             Actions = actions;
             PotActions = potActions;
-            CreatedTime = DateTime.UtcNow;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ai_poker_coach.Models.Domain
         public ICollection<PotAction> PotActions = [];
 
         [ForeignKey("Hand")]
-        public int HandId { get; set; }
+        public string HandId { get; set; } = "";
         public Hand Hand { get; set; } = new();
 
         public Pot() { }
@@ -21,7 +21,7 @@ namespace ai_poker_coach.Models.Domain
         public Pot(Hand hand, PotDto potDto)
         {
             Hand = hand;
-            HandId = hand.HandId;
+            HandId = hand.Id;
             PotIndex = potDto.PotIndex;
             Winner = potDto.Winner!;
         }

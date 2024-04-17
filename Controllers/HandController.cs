@@ -97,7 +97,7 @@ namespace ai_poker_coach.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Post([FromBody] HandDto body)
+        public async Task<IActionResult> Post([FromBody] HandInputDto body)
         {
             if (!ModelState.IsValid)
             {
@@ -125,7 +125,8 @@ namespace ai_poker_coach.Controllers
 
                 if (rowsAffected > 0)
                 {
-                    return Ok(hand);
+                    var handOutputDto = new HandOutputDto(hand);
+                    return Ok(handOutputDto);
                 }
                 else
                 {
@@ -163,9 +164,9 @@ namespace ai_poker_coach.Controllers
                 }
 
                 List<Hand> hands = await query.ToListAsync();
-                List<HandDto> handDtos = hands.Select(hand => new HandDto(hand)).ToList();
+                List<HandOutputDto> handOutputDtos = hands.Select(hand => new HandOutputDto(hand)).ToList();
 
-                return Ok(handDtos);
+                return Ok(handOutputDtos);
             }
             catch (Exception ex)
             {
@@ -174,7 +175,7 @@ namespace ai_poker_coach.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
@@ -184,16 +185,16 @@ namespace ai_poker_coach.Controllers
                     .Include(h => h.Evaluations)
                     .Include(h => h.Actions)
                     .Include(h => h.PotActions)
-                    .FirstOrDefaultAsync(hand => hand.HandId == id);
+                    .FirstOrDefaultAsync(hand => hand.Id == id);
 
                 if (hand == null)
                 {
                     return NotFound($"Hand ID of \"{id}\" does not exist.");
                 }
 
-                var handDto = new HandDto(hand);
+                var handOutputDto = new HandOutputDto(hand);
 
-                return Ok(handDto);
+                return Ok(handOutputDto);
             }
             catch (Exception ex)
             {
@@ -201,27 +202,27 @@ namespace ai_poker_coach.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int handId)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (handId == 0)
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest("Hand ID is required.");
             }
 
-            var hand = await _dbContext.Hands.FirstOrDefaultAsync(h => h.HandId == handId);
+            var hand = await _dbContext.Hands.FirstOrDefaultAsync(h => h.Id == id);
             if (hand == null)
             {
-                return NotFound($"Hand ID of \"{handId}\" does not exist.");
+                return NotFound($"Hand ID of \"{id}\" does not exist.");
             }
 
             var user = await _dbContext
                 .ApplicationUsers.Include(u => u.Hands)
-                .FirstOrDefaultAsync(u => u.Hands.Any(h => h.HandId == handId));
+                .FirstOrDefaultAsync(u => u.Hands.Any(h => h.Id == id));
             if (user == null)
             {
-                return NotFound($"No user associated with hand ID of \"{handId}\".");
+                return NotFound($"No user associated with hand ID of \"{id}\".");
             }
 
             string? authenticatedUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

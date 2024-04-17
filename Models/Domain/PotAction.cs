@@ -16,7 +16,7 @@ namespace ai_poker_coach.Models.Domain
         public Pot Pot { get; set; } = new();
 
         [ForeignKey("Hand")]
-        public int HandId { get; set; }
+        public string HandId { get; set; } = "";
         public Hand Hand { get; set; } = new();
         public int Step { get; set; }
 
@@ -27,7 +27,7 @@ namespace ai_poker_coach.Models.Domain
             var pot = hand.Pots.First(pot => pot.PotIndex == potActionDto.PotIndex);
 
             Hand = hand;
-            HandId = hand.HandId;
+            HandId = hand.Id;
             Step = potActionDto.Step ?? 0;
             Player = potActionDto.Player ?? 0;
             Pot = pot;
