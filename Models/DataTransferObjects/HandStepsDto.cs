@@ -37,7 +37,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]
         public decimal? MyStack { get; set; }
 
-        public string? PlayerNotes { get; set; }
+        public string Notes { get; set; } = "";
 
         [Required]
         public List<PotDto>? Pots { get; set; }
@@ -120,7 +120,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
             Ante = hand.Ante;
             BigBlindAnte = hand.BigBlindAnte;
             MyStack = hand.MyStack;
-            PlayerNotes = hand.PlayerNotes;
+            Notes = hand.Notes;
             Pots = hand
                 .Pots.Select((pot, index) => new { pot, index })
                 .Select(inner => new PotDto() { PotIndex = inner.index, Winner = inner.pot.Winner })

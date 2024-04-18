@@ -10,7 +10,7 @@
 		"ante": 0,
 		"bigBlindAnte": 0,
 		"myStack": 1000,
-		"playerNotes": "",
+		"notes": "These are some notes about this hand. I felt like putting my money on the line and creating a side pot for scientific purposes. Watch out for the player in position 1.",
 		"pots": [
 			{
 				"potIndex": 0,
@@ -304,5 +304,5 @@
 			}
 		]
 	},
-	"analysis": "This is a test analysis."
+	"analysis": "In this hand, you started with King of Diamonds and Three of Clubs. You bet 100 chips, and there were subsequent bets and calls from the other players. The action led to a situation where you had Two Pair (Kings and Threes) after the flop (King of Diamonds, Queen of Hearts, Three of Spades). When player 2 went all-in for 1800 chips, player 4 called, and then you went all-in for 800 chips.\n\nThe final hands were revealed with player 2 having Three of a Kind, Queens, and player 4 having a Pair of Aces. The board showed Kings and Threes, but the community cards also included an Ace, giving player 4 a stronger hand with a pair of Aces.\n\nIn this hand, despite having a strong hand with Two Pair (Kings and Threes), the community cards revealed potential for very strong hands like Three of a Kind or even a potential Straight. It's unfortunate that player 4 had the Aces which beat your Two Pair.\n\nOne point to consider in this hand is when player 2 went all-in, signaling strength with the aggressive bet, and player 4 called, showing belief in their hand. When you went all-in as well, you committed more chips to the pot despite the potential of strong hands present. \n\nGiven the situation and the actions of the other players, it might have been better to consider folding when facing the aggressive action of player 2 and the call by player 4. As the board showed a combination of high cards, it was a risky situation with strong potential hands all around. In such scenarios, it's crucial to consider the strength of your hand relative to the actions of your opponents to make informed decisions and avoid committing too many chips when facing significant aggression from other players."
 }

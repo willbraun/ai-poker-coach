@@ -8,7 +8,7 @@
 	"ante": 0,
 	"bigBlindAnte": 0,
 	"myStack": 180,
-	"playerNotes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 7. Other players seem pretty conservative.",
+	"notes": "Player in position 7 is aggressive and winning lots of pots. Player in position 3, to my right, is aggressive but not quite as much as player 7. Other players seem pretty conservative.",
 	"rounds": [
 		{
 			"cards": [

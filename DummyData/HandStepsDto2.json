@@ -8,7 +8,7 @@
 	"ante": 0,
 	"bigBlindAnte": 0,
 	"myStack": 1000,
-	"playerNotes": "",
+	"notes": "These are some notes about this hand. I felt like putting my money on the line and creating a side pot for scientific purposes. Watch out for the player in position 1.",
 	"pots": [
 		{
 			"potIndex": 0,

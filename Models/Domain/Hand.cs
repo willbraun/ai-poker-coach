@@ -17,7 +17,7 @@ namespace ai_poker_coach.Models.Domain
         public decimal Ante { get; set; }
         public decimal BigBlindAnte { get; set; }
         public decimal MyStack { get; set; }
-        public string PlayerNotes { get; set; } = "";
+        public string Notes { get; set; } = "";
         public ICollection<Pot> Pots { get; set; } = [];
         public ICollection<Card> Cards { get; set; } = [];
         public ICollection<Evaluation> Evaluations { get; set; } = [];
@@ -52,7 +52,7 @@ namespace ai_poker_coach.Models.Domain
             Ante = handInputDto.HandSteps.Ante ?? 0;
             BigBlindAnte = handInputDto.HandSteps.BigBlindAnte ?? 0;
             MyStack = handInputDto.HandSteps.MyStack ?? 0;
-            PlayerNotes = handInputDto.HandSteps.PlayerNotes!;
+            Notes = handInputDto.HandSteps.Notes;
             Analysis = handInputDto.Analysis!;
 
             Pots = handInputDto.HandSteps!.Pots!.Select(potDto => new Pot(this, potDto)).ToList();

@@ -24,7 +24,7 @@ namespace ai_poker_coach.Utils
             Ante: {body.Ante}
             Big Blind Ante: {body.BigBlindAnte}
             My Stack: {body.MyStack}
-            Player Notes: {body.PlayerNotes}
+            Player Notes: {body.Notes}
 
             Starting pot size after antes: {pots[0]}
             
