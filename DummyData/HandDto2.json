@@ -28,7 +28,7 @@
 						"step": 1,
 						"player": 1,
 						"value": "K",
-						"suit": "H"
+						"suit": "D"
 					},
 					{
 						"step": 2,
@@ -76,7 +76,7 @@
 					{
 						"step": 9,
 						"player": 2,
-						"decision": 2,
+						"decision": 1,
 						"bet": 0
 					}
 				],
@@ -113,7 +113,7 @@
 						"step": 14,
 						"player": 0,
 						"value": "K",
-						"suit": "D"
+						"suit": "C"
 					},
 					{
 						"step": 15,
@@ -143,7 +143,7 @@
 					{
 						"step": 19,
 						"player": 2,
-						"decision": 4,
+						"decision": 5,
 						"bet": 1800
 					},
 					{
@@ -161,7 +161,7 @@
 					{
 						"step": 22,
 						"player": 1,
-						"decision": 5,
+						"decision": 6,
 						"bet": 800
 					}
 				],

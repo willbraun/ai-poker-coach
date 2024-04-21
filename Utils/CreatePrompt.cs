@@ -105,7 +105,16 @@ namespace ai_poker_coach.Utils
 
         static string GetActionMessages(List<ActionDto> actions, int myPosition)
         {
-            List<string> decisions = ["folds", "checks", "calls", "bets", "bets all-in for", "calls all-in for"];
+            List<string> decisions =
+            [
+                "folds",
+                "checks",
+                "calls",
+                "bets",
+                "raises to",
+                "bets all-in for",
+                "calls all-in for"
+            ];
 
             string addition = "";
             foreach (var action in actions)

@@ -12,7 +12,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public int? Player { get; set; }
 
         [Required]
-        [Range(0, 5)]
+        [Range(0, 6)]
         public int? Decision { get; set; }
 
         [Required]
