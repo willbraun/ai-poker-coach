@@ -92,7 +92,9 @@ namespace ai_poker_coach.Controllers
                 );
             }
 
-            return Ok(analysis);
+            var result = new { Analysis = analysis };
+
+            return Ok(result);
         }
 
         [HttpPost]
