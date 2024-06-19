@@ -59,38 +59,38 @@ namespace ai_poker_coach.Controllers
                 stream = true
             };
 
-            string analysis = "";
-            try
-            {
-                var httpClient = _httpClientFactory.CreateClient();
-                httpClient.DefaultRequestHeaders.Add(
-                    HeaderNames.Authorization,
-                    $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"
-                );
-                httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
-                var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
+            string analysis = "TESTING";
+            // try
+            // {
+            //     var httpClient = _httpClientFactory.CreateClient();
+            //     httpClient.DefaultRequestHeaders.Add(
+            //         HeaderNames.Authorization,
+            //         $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"
+            //     );
+            //     httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
+            //     var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
 
-                response.EnsureSuccessStatusCode();
+            //     response.EnsureSuccessStatusCode();
 
-                using Stream stream = await response.Content.ReadAsStreamAsync();
-                using StreamReader reader = new(stream, Encoding.UTF8);
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine()!;
-                    if (line.Contains("\"object\":\"thread.message\",") && line.Contains("\"status\":\"completed\","))
-                    {
-                        analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    $"An error occurred while analyzing data: {ex.Message}"
-                );
-            }
+            //     using Stream stream = await response.Content.ReadAsStreamAsync();
+            //     using StreamReader reader = new(stream, Encoding.UTF8);
+            //     while (!reader.EndOfStream)
+            //     {
+            //         string line = reader.ReadLine()!;
+            //         if (line.Contains("\"object\":\"thread.message\",") && line.Contains("\"status\":\"completed\","))
+            //         {
+            //             analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
+            //             break;
+            //         }
+            //     }
+            // }
+            // catch (Exception ex)
+            // {
+            //     return StatusCode(
+            //         StatusCodes.Status500InternalServerError,
+            //         $"An error occurred while analyzing data: {ex.Message}"
+            //     );
+            // }
 
             var result = new { Analysis = analysis };
 
