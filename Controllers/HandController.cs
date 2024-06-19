@@ -11,6 +11,11 @@ using static ai_poker_coach.Utils.PromptUtils;
 
 namespace ai_poker_coach.Controllers
 {
+    public class ErrorMessage(string message)
+    {
+        public string Message { get; set; } = message;
+    }
+
     [ApiController]
     [Route("[controller]")]
     public class HandController : ControllerBase
@@ -109,13 +114,15 @@ namespace ai_poker_coach.Controllers
             var user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == body.ApplicationUserId);
             if (user == null)
             {
-                return NotFound($"User ID of {body.ApplicationUserId} does not exist.");
+                return NotFound(new ErrorMessage($"User ID of {body.ApplicationUserId} does not exist."));
             }
 
             string? authenticatedUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (authenticatedUserId != user.Id)
             {
-                return BadRequest($"You may only add hands to your own account (ID: {authenticatedUserId})");
+                return BadRequest(
+                    new ErrorMessage($"You may only add hands to your own account (ID: {authenticatedUserId})")
+                );
             }
 
             var hand = new Hand(user, body);
@@ -132,7 +139,7 @@ namespace ai_poker_coach.Controllers
                 }
                 else
                 {
-                    return BadRequest("Failed to add hand");
+                    return BadRequest(new ErrorMessage("Failed to add hand"));
                 }
             }
             catch (Exception ex)
@@ -159,7 +166,7 @@ namespace ai_poker_coach.Controllers
                     var user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == userId);
                     if (user == null)
                     {
-                        return NotFound($"User ID of \"{userId}\" does not exist.");
+                        return NotFound(new ErrorMessage($"User ID of \"{userId}\" does not exist."));
                     }
 
                     query = query.Where(hand => hand.ApplicationUserId == userId);
@@ -191,7 +198,7 @@ namespace ai_poker_coach.Controllers
 
                 if (hand == null)
                 {
-                    return NotFound($"Hand ID of \"{id}\" does not exist.");
+                    return NotFound(new ErrorMessage($"Hand ID of \"{id}\" does not exist."));
                 }
 
                 var handOutputDto = new HandOutputDto(hand);
@@ -210,13 +217,13 @@ namespace ai_poker_coach.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return BadRequest("Hand ID is required.");
+                return BadRequest(new ErrorMessage("Hand ID is required."));
             }
 
             var hand = await _dbContext.Hands.FirstOrDefaultAsync(h => h.Id == id);
             if (hand == null)
             {
-                return NotFound($"Hand ID of \"{id}\" does not exist.");
+                return NotFound(new ErrorMessage($"Hand ID of \"{id}\" does not exist."));
             }
 
             var user = await _dbContext
@@ -224,13 +231,15 @@ namespace ai_poker_coach.Controllers
                 .FirstOrDefaultAsync(u => u.Hands.Any(h => h.Id == id));
             if (user == null)
             {
-                return NotFound($"No user associated with hand ID of \"{id}\".");
+                return NotFound(new ErrorMessage($"No user associated with hand ID of \"{id}\"."));
             }
 
             string? authenticatedUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (authenticatedUserId != user.Id)
             {
-                return BadRequest($"You may only delete hands from your own account (ID: {authenticatedUserId})");
+                return BadRequest(
+                    new ErrorMessage($"You may only delete hands from your own account (ID: {authenticatedUserId})")
+                );
             }
 
             user.Hands.Remove(hand);
@@ -241,11 +250,11 @@ namespace ai_poker_coach.Controllers
 
                 if (rowsAffected > 0)
                 {
-                    return Ok("Successfully deleted hand");
+                    return Ok();
                 }
                 else
                 {
-                    return BadRequest("Failed to delete hand");
+                    return BadRequest(new ErrorMessage("Failed to delete hand"));
                 }
             }
             catch (Exception ex)
