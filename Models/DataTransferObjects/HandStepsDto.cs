@@ -155,7 +155,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 );
             }
 
-            if (Rounds[1].Cards.Count != 3)
+            if (Rounds.Count > 1 && Rounds[1].Cards.Count != 3)
             {
                 yield return new ValidationResult(
                     $"There must be 3 cards in the second round (flop). Provided: {Rounds[1].Cards.Count}.",
@@ -163,7 +163,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 );
             }
 
-            if (Rounds[2].Cards.Count != 1)
+            if (Rounds.Count > 2 && Rounds[2].Cards.Count != 1)
             {
                 yield return new ValidationResult(
                     $"There must be 1 card in the third round (turn). Provided: {Rounds[2].Cards.Count}.",
@@ -171,7 +171,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 );
             }
 
-            if (Rounds[3].Cards.Count != 1)
+            if (Rounds.Count > 3 && Rounds[3].Cards.Count != 1)
             {
                 yield return new ValidationResult(
                     $"There must be 1 card in the fourth round (river). Provided: {Rounds[3].Cards.Count}.",
