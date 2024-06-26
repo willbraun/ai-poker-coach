@@ -64,7 +64,9 @@ namespace ai_poker_coach.Controllers
                 stream = true
             };
 
-            string analysis = "TESTING";
+            string analysis =
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nVivamus lacinia odio vitae vestibulum vestibulum.\nSed ac felis sit amet ligula pharetra condimentum.\nMorbi in sem quis dui placerat ornare.\nPellentesque odio nisi, euismod in, pharetra a, ultricies in, diam.\nSed arcu. Cras consequat.\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\nVivamus lacinia odio vitae vestibulum vestibulum.\nSed ac felis sit amet ligula pharetra condimentum.\nMorbi in sem quis dui placerat ornare.\nPellentesque odio nisi, euismod in, pharetra a, ultricies in, diam.\nSed arcu. Cras consequat.";
+            await Task.Delay(3000);
             // try
             // {
             //     var httpClient = _httpClientFactory.CreateClient();
