@@ -28,11 +28,11 @@ namespace ai_poker_coach.Models.Domain
 
             Hand = hand;
             HandId = hand.Id;
-            Step = potActionDto.Step ?? 0;
-            Player = potActionDto.Player ?? 0;
+            Step = potActionDto.Step;
+            Player = potActionDto.Player;
             Pot = pot;
             PotId = pot.PotId;
-            Bet = potActionDto.Bet ?? 0;
+            Bet = potActionDto.Bet;
         }
     }
 }

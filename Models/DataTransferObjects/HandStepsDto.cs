@@ -8,49 +8,37 @@ namespace ai_poker_coach.Models.DataTransferObjects
     {
         public string Name { get; set; } = "";
 
-        [Required]
         [Range(0, 1, ErrorMessage = "Game style must be either 0 (tournament) or 1 (cash game).")]
-        public int? GameStyle { get; set; }
+        public int GameStyle { get; set; }
 
-        [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Player count must be a positive integer.")]
-        public int? PlayerCount { get; set; }
+        public int PlayerCount { get; set; }
 
-        [Required]
-        public int? Position { get; set; }
+        public int Position { get; set; }
 
-        [Required]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Small blind must be positive.")]
-        public decimal? SmallBlind { get; set; }
+        public decimal SmallBlind { get; set; }
 
-        [Required]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big blind must be positive.")]
-        public decimal? BigBlind { get; set; }
+        public decimal BigBlind { get; set; }
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Ante must be positive.")]
-        public decimal? Ante { get; set; } = 0;
+        public decimal Ante { get; set; } = 0;
 
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Big Blind Ante must be positive.")]
-        public decimal? BigBlindAnte { get; set; } = 0;
+        public decimal BigBlindAnte { get; set; } = 0;
 
-        [Required]
         [Range(0, (double)decimal.MaxValue, ErrorMessage = "Stack must be positive.")]
-        public decimal? MyStack { get; set; }
+        public decimal MyStack { get; set; }
 
         public string Notes { get; set; } = "";
-
-        [Required]
-        public List<PotDto>? Pots { get; set; }
-
-        [Required]
-        public List<RoundDto>? Rounds { get; set; }
-
+        public List<PotDto> Pots { get; set; } = [];
+        public List<RoundDto> Rounds { get; set; } = [];
         public List<VillainDto> Villains { get; set; } = [];
 
         public HandStepsDto() { }
 
         public HandStepsDto(Hand hand)
-            : this()
         {
             static (List<RoundDto>, List<VillainDto>) getDtos(Hand hand)
             {
@@ -139,7 +127,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 );
             }
 
-            if (Rounds!.Count < 1 || Rounds.Count > 4)
+            if (Rounds.Count < 1 || Rounds.Count > 4)
             {
                 yield return new ValidationResult(
                     $"There must be between 1 and 4 rounds. Provided: {Rounds.Count}.",
@@ -179,12 +167,12 @@ namespace ai_poker_coach.Models.DataTransferObjects
                 );
             }
 
-            if (Pots![0].PotIndex != 0)
+            if (Pots[0].PotIndex != 0)
             {
                 yield return new ValidationResult($"Pots must start at 0. ", [nameof(Pots)]);
             }
 
-            for (int i = 1; i < Pots!.Count; i++)
+            for (int i = 1; i < Pots.Count; i++)
             {
                 if (Pots[i].PotIndex - 1 != Pots[i - 1].PotIndex)
                 {
@@ -276,7 +264,7 @@ namespace ai_poker_coach.Models.DataTransferObjects
     public class PotDto
     {
         public int PotIndex { get; set; }
-        public string? Winner { get; set; }
+        public string Winner { get; set; } = "";
     }
 
     public class RoundDto

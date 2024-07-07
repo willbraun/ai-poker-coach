@@ -108,7 +108,12 @@ app.MapPost(
                 string responseBody = await response.Content.ReadAsStringAsync();
                 var responseObject = JsonSerializer.Deserialize<LoginInnerResponseDto>(responseBody);
 
-                return TypedResults.Ok(new LoginResponseDto(user, responseObject!));
+                if (responseObject == null)
+                {
+                    return TypedResults.UnprocessableEntity("Login error: response object is null");
+                }
+
+                return TypedResults.Ok(new LoginResponseDto(user, responseObject));
             }
             catch (HttpRequestException ex)
             {
@@ -155,13 +160,23 @@ app.MapPost(
             {
                 var newUser = await userManager.FindByEmailAsync(requestBody.Email);
 
+                if (newUser == null)
+                {
+                    return TypedResults.UnprocessableEntity("User not found after registration");
+                }
+
                 var loginResponse = await httpClient.PostAsJsonAsync($"http://localhost:{port}/login", requestBody);
                 loginResponse.EnsureSuccessStatusCode();
 
                 string loginResponseBody = await loginResponse.Content.ReadAsStringAsync();
                 var loginResponseObject = JsonSerializer.Deserialize<LoginInnerResponseDto>(loginResponseBody);
 
-                return TypedResults.Ok(new LoginResponseDto(newUser!, loginResponseObject!));
+                if (loginResponseObject == null)
+                {
+                    return TypedResults.UnprocessableEntity("Login error: response object is null");
+                }
+
+                return TypedResults.Ok(new LoginResponseDto(newUser, loginResponseObject));
             }
             catch (HttpRequestException ex)
             {

@@ -1,10 +1,12 @@
 using System.Security.Claims;
+using System.Text;
 using ai_poker_coach.Models.DataTransferObjects;
 using ai_poker_coach.Models.Domain;
 using DotNet8Authentication.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using static ai_poker_coach.Utils.PromptUtils;
 
 namespace ai_poker_coach.Controllers
@@ -62,40 +64,41 @@ namespace ai_poker_coach.Controllers
                 stream = true
             };
 
-            string analysis =
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nVivamus lacinia odio vitae vestibulum vestibulum.\nSed ac felis sit amet ligula pharetra condimentum.\nMorbi in sem quis dui placerat ornare.\nPellentesque odio nisi, euismod in, pharetra a, ultricies in, diam.\nSed arcu. Cras consequat.\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\nVivamus lacinia odio vitae vestibulum vestibulum.\nSed ac felis sit amet ligula pharetra condimentum.\nMorbi in sem quis dui placerat ornare.\nPellentesque odio nisi, euismod in, pharetra a, ultricies in, diam.\nSed arcu. Cras consequat.";
-            await Task.Delay(3000);
-            // try
-            // {
-            //     var httpClient = _httpClientFactory.CreateClient();
-            //     httpClient.DefaultRequestHeaders.Add(
-            //         HeaderNames.Authorization,
-            //         $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"
-            //     );
-            //     httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
-            //     var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
+            string analysis = "";
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient();
+                httpClient.DefaultRequestHeaders.Add(
+                    HeaderNames.Authorization,
+                    $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"
+                );
+                httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
+                var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
 
-            //     response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
-            //     using Stream stream = await response.Content.ReadAsStreamAsync();
-            //     using StreamReader reader = new(stream, Encoding.UTF8);
-            //     while (!reader.EndOfStream)
-            //     {
-            //         string line = reader.ReadLine()!;
-            //         if (line.Contains("\"object\":\"thread.message\",") && line.Contains("\"status\":\"completed\","))
-            //         {
-            //             analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
-            //             break;
-            //         }
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     return StatusCode(
-            //         StatusCodes.Status500InternalServerError,
-            //         $"An error occurred while analyzing data: {ex.Message}"
-            //     );
-            // }
+                using Stream stream = await response.Content.ReadAsStreamAsync();
+                using StreamReader reader = new(stream, Encoding.UTF8);
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    if (
+                        line?.Contains("\"object\":\"thread.message\",") == true
+                        && line.Contains("\"status\":\"completed\",")
+                    )
+                    {
+                        analysis = line.Split("\"value\":")[1].Split(",\"annotations\":")[0];
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    $"An error occurred while analyzing data: {ex.Message}"
+                );
+            }
 
             var result = new { Analysis = analysis };
 

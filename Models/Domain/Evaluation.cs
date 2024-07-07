@@ -22,9 +22,9 @@ namespace ai_poker_coach.Models.Domain
         {
             Hand = hand;
             HandId = hand.Id;
-            Step = evalutationDto.Step ?? 0;
-            Player = evalutationDto.Player ?? 0;
-            Value = evalutationDto.Value!;
+            Step = evalutationDto.Step;
+            Player = evalutationDto.Player;
+            Value = evalutationDto.Value;
         }
     }
 }

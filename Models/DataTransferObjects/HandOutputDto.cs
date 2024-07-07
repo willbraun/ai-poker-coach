@@ -13,7 +13,6 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public HandOutputDto() { }
 
         public HandOutputDto(Hand hand)
-            : this()
         {
             Id = hand.Id;
             ApplicationUserId = hand.ApplicationUserId;

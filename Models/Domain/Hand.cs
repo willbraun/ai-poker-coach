@@ -42,27 +42,27 @@ namespace ai_poker_coach.Models.Domain
             }
 
             ApplicationUser = user;
-            ApplicationUserId = user.Id!;
-            Name = handInputDto.HandSteps!.Name;
-            GameStyle = handInputDto.HandSteps.GameStyle ?? 0;
-            PlayerCount = handInputDto.HandSteps.PlayerCount ?? 0;
-            Position = handInputDto.HandSteps.Position ?? 0;
-            SmallBlind = handInputDto.HandSteps.SmallBlind ?? 0;
-            BigBlind = handInputDto.HandSteps.BigBlind ?? 0;
-            Ante = handInputDto.HandSteps.Ante ?? 0;
-            BigBlindAnte = handInputDto.HandSteps.BigBlindAnte ?? 0;
-            MyStack = handInputDto.HandSteps.MyStack ?? 0;
+            ApplicationUserId = user.Id;
+            Name = handInputDto.HandSteps.Name;
+            GameStyle = handInputDto.HandSteps.GameStyle;
+            PlayerCount = handInputDto.HandSteps.PlayerCount;
+            Position = handInputDto.HandSteps.Position;
+            SmallBlind = handInputDto.HandSteps.SmallBlind;
+            BigBlind = handInputDto.HandSteps.BigBlind;
+            Ante = handInputDto.HandSteps.Ante;
+            BigBlindAnte = handInputDto.HandSteps.BigBlindAnte;
+            MyStack = handInputDto.HandSteps.MyStack;
             Notes = handInputDto.HandSteps.Notes;
-            Analysis = handInputDto.Analysis!;
+            Analysis = handInputDto.Analysis;
 
-            Pots = handInputDto.HandSteps!.Pots!.Select(potDto => new Pot(this, potDto)).ToList();
+            Pots = handInputDto.HandSteps.Pots.Select(potDto => new Pot(this, potDto)).ToList();
 
             ICollection<Card> cards = [];
             ICollection<Evaluation> evaluations = [];
             ICollection<Action> actions = [];
             ICollection<PotAction> potActions = [];
 
-            foreach (var round in handInputDto.HandSteps!.Rounds!)
+            foreach (var round in handInputDto.HandSteps.Rounds)
             {
                 cards = [..cards, ..round.Cards.Select(cardDto => new Card(this, cardDto))];
                 evaluations = [..evaluations, new Evaluation(this, round.Evaluation)];

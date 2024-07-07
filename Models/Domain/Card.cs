@@ -23,10 +23,10 @@ namespace ai_poker_coach.Models.Domain
         {
             Hand = hand;
             HandId = hand.Id;
-            Step = cardDto.Step ?? 0;
-            Player = cardDto.Player ?? 0;
-            Value = cardDto.Value!;
-            Suit = cardDto.Suit!;
+            Step = cardDto.Step;
+            Player = cardDto.Player;
+            Value = cardDto.Value;
+            Suit = cardDto.Suit;
         }
     }
 }

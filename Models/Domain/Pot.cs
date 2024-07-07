@@ -23,7 +23,7 @@ namespace ai_poker_coach.Models.Domain
             Hand = hand;
             HandId = hand.Id;
             PotIndex = potDto.PotIndex;
-            Winner = potDto.Winner!;
+            Winner = potDto.Winner;
         }
     }
 }
