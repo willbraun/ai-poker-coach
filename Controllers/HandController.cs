@@ -1,12 +1,10 @@
 using System.Security.Claims;
-using System.Text;
 using ai_poker_coach.Models.DataTransferObjects;
 using ai_poker_coach.Models.Domain;
 using DotNet8Authentication.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 using static ai_poker_coach.Utils.PromptUtils;
 
 namespace ai_poker_coach.Controllers

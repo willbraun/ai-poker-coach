@@ -1,6 +1,6 @@
 using ai_poker_coach.Models.Domain;
 
-namespace ai_poker_coach.Models.DataTransferObjects
+namespace ai_poker_coach.Models.DataTransferObjects.Authentication
 {
     public class LoginResponseDto
     {
@@ -12,9 +12,9 @@ namespace ai_poker_coach.Models.DataTransferObjects
         public LoginResponseDto(ApplicationUser user, LoginInnerResponseDto loginInnerResponseDto)
         {
             UserId = user.Id;
-            AccessToken = loginInnerResponseDto.accessToken;
-            ExpiresIn = loginInnerResponseDto.expiresIn;
-            RefreshToken = loginInnerResponseDto.refreshToken;
+            AccessToken = loginInnerResponseDto.AccessToken;
+            ExpiresIn = loginInnerResponseDto.ExpiresIn;
+            RefreshToken = loginInnerResponseDto.RefreshToken;
         }
     }
 }

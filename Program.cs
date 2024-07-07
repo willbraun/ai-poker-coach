@@ -1,4 +1,3 @@
-using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ai_poker_coach.Models.DataTransferObjects;

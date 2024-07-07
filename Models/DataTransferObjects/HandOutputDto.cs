@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using ai_poker_coach.Models.Domain;
 
 namespace ai_poker_coach.Models.DataTransferObjects

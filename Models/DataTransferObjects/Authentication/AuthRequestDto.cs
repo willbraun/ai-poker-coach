@@ -1,4 +1,4 @@
-namespace ai_poker_coach.Models.DataTransferObjects
+namespace ai_poker_coach.Models.DataTransferObjects.Authentication
 {
     public class AuthRequestDto
     {
