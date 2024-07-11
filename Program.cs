@@ -62,6 +62,13 @@ builder.Services.AddHttpClient();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
+        "ProdCorsPolicy",
+        policy =>
+        {
+            policy.WithOrigins("https://ai-poker-coach.netlify.app").AllowAnyHeader().AllowAnyMethod();
+        }
+    );
+    options.AddPolicy(
         "DevCorsPolicy",
         policy =>
         {
@@ -85,6 +92,8 @@ if (app.Environment.IsDevelopment())
 else
 {
     port = 5000;
+
+    app.UseCors("ProdCorsPolicy");
 }
 
 app.MapIdentityApi<ApplicationUser>();
