@@ -65,7 +65,10 @@ builder.Services.AddCors(options =>
         "ProdCorsPolicy",
         policy =>
         {
-            policy.WithOrigins("https://ai-poker-coach.netlify.app").AllowAnyHeader().AllowAnyMethod();
+            policy
+                .WithOrigins("https://ai-poker-coach.netlify.app", "https://aipokercoach.willbraun.dev")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
         }
     );
     options.AddPolicy(
