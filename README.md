@@ -14,7 +14,7 @@ Poker is a game of incomplete information and luck, so it can be difficult to kn
 
 **Server (this repository):** ASP.NET Core Web API, C#, Entity Framework Core, PostgreSQL
 
-**3rd-Party APIs**: OpenAI Threads API to interact with OpenAI Assistant powered by `gpt-3.5-turbo` with added poker documents
+**3rd-Party APIs**: OpenAI Threads API to interact with OpenAI Assistant powered by GPT-4o Mini with added poker documents
 
 **Hosting:**
 
