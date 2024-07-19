@@ -2,7 +2,7 @@ using ai_poker_coach.Models.DataTransferObjects;
 
 namespace ai_poker_coach.Utils
 {
-    public class PromptUtils
+    public static class PromptUtils
     {
         private static List<decimal> pots = [0];
 
@@ -66,13 +66,13 @@ namespace ai_poker_coach.Utils
             return message;
         }
 
-        static string TrimLeadingSpaces(string input)
+        private static string TrimLeadingSpaces(string input)
         {
             string[] lines = input.Trim().Split('\n');
             return string.Join(Environment.NewLine, lines.Select(line => line.TrimStart()));
         }
 
-        public static string ListCards(List<CardDto> cards)
+        private static string ListCards(List<CardDto> cards)
         {
             Dictionary<string, string> values =
                 new()
@@ -103,7 +103,7 @@ namespace ai_poker_coach.Utils
             return string.Join(", ", cards.Select(card => $"{values[card.Value]} of {suits[card.Suit]}"));
         }
 
-        static string GetActionMessages(List<ActionDto> actions, int myPosition)
+        private static string GetActionMessages(List<ActionDto> actions, int myPosition)
         {
             List<string> decisions =
             [
@@ -127,7 +127,7 @@ namespace ai_poker_coach.Utils
             return addition;
         }
 
-        static string GetPotActionMessages(List<PotActionDto> potActions, int myPosition)
+        private static string GetPotActionMessages(List<PotActionDto> potActions, int myPosition)
         {
             string addition = "";
             foreach (var potAction in potActions)
@@ -148,7 +148,7 @@ namespace ai_poker_coach.Utils
             return addition;
         }
 
-        static string GetPotName(int index)
+        private static string GetPotName(int index)
         {
             string name = "main pot";
             if (index == 1)
