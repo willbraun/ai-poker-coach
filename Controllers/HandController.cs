@@ -52,11 +52,23 @@ namespace ai_poker_coach.Controllers
                         {
                             role = "user",
                             content = prompt,
-                            file_ids = new[]
+                            attachments = new[]
                             {
-                                Environment.GetEnvironmentVariable("OPENAI_FILE_ID_1"),
-                                Environment.GetEnvironmentVariable("OPENAI_FILE_ID_2"),
-                                Environment.GetEnvironmentVariable("OPENAI_FILE_ID_3")
+                                new
+                                {
+                                    file_id = Environment.GetEnvironmentVariable("OPENAI_FILE_ID_1"),
+                                    tools = new[] { new { type = "file_search" } }
+                                },
+                                new
+                                {
+                                    file_id = Environment.GetEnvironmentVariable("OPENAI_FILE_ID_2"),
+                                    tools = new[] { new { type = "file_search" } }
+                                },
+                                new
+                                {
+                                    file_id = Environment.GetEnvironmentVariable("OPENAI_FILE_ID_3"),
+                                    tools = new[] { new { type = "file_search" } }
+                                }
                             }
                         }
                     }
@@ -72,7 +84,7 @@ namespace ai_poker_coach.Controllers
                     HeaderNames.Authorization,
                     $"Bearer {Environment.GetEnvironmentVariable("OPENAI_API_KEY")}"
                 );
-                httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v1");
+                httpClient.DefaultRequestHeaders.Add("OpenAI-Beta", "assistants=v2");
                 var response = await httpClient.PostAsJsonAsync("https://api.openai.com/v1/threads/runs", openaiBody);
 
                 response.EnsureSuccessStatusCode();
