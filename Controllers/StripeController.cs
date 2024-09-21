@@ -1,4 +1,7 @@
+using ai_poker_coach.Models.Domain;
+using DotNet8Authentication.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 
 namespace ai_poker_coach.Controllers
@@ -9,14 +12,18 @@ namespace ai_poker_coach.Controllers
     {
         private readonly string _stripeWebhookSecret;
 
-        public StripeController()
+        private readonly IdentityDataContext _dbContext;
+
+        public StripeController(IdentityDataContext dbContext)
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             _stripeWebhookSecret =
                 environment == "Development"
-                    ? Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_LOCAL") ?? "Could not load local secret"
+                    ? Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_LOCAL")
+                        ?? "Could not load local Stripe webhook secret"
                     : Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_PRODUCTION")
-                        ?? "Could not load production secret";
+                        ?? "Could not load production Stripe webhook secret";
+            _dbContext = dbContext;
         }
 
         [HttpPost]
@@ -35,9 +42,43 @@ namespace ai_poker_coach.Controllers
                 switch (stripeEvent.Type)
                 {
                     case Events.CustomerSubscriptionCreated:
-                        var newSubscription = stripeEvent.Data.Object as Subscription;
-                        Console.WriteLine("newSubscription: " + newSubscription);
-                        // Handle subscription creation logic
+                        if (stripeEvent.Data.Object is Subscription newSubscription)
+                        {
+                            var user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(u =>
+                                u.StripeCustomerId == newSubscription.CustomerId
+                            );
+
+                            if (user == null)
+                            {
+                                // If user is not found by StripeCustomerId, try to find by email
+                                var customer = await new CustomerService().GetAsync(newSubscription.CustomerId);
+                                user = await _dbContext.ApplicationUsers.FirstOrDefaultAsync(u =>
+                                    u.Email == customer.Email
+                                );
+
+                                if (user != null)
+                                {
+                                    // Update the user with the Stripe Customer ID
+                                    user.StripeCustomerId = newSubscription.CustomerId;
+                                    await _dbContext.SaveChangesAsync();
+                                }
+                            }
+
+                            if (user != null)
+                            {
+                                var stripeSubscription = new StripeSubscription(user, newSubscription);
+
+                                await _dbContext.StripeSubscriptions.AddAsync(stripeSubscription);
+                                await _dbContext.SaveChangesAsync();
+                                Console.WriteLine($"Added new StripeSubscription: {stripeSubscription.Id}");
+                            }
+                            else
+                            {
+                                Console.WriteLine(
+                                    $"User not found for Stripe Customer ID: {newSubscription.CustomerId}"
+                                );
+                            }
+                        }
                         break;
 
                     case Events.CustomerSubscriptionUpdated:

@@ -10,6 +10,7 @@ namespace DotNet8Authentication.Data
             : base(options) { }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<StripeSubscription> StripeSubscriptions { get; set; }
         public DbSet<Hand> Hands { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -19,6 +20,13 @@ namespace DotNet8Authentication.Data
             modelBuilder
                 .Entity<ApplicationUser>()
                 .HasMany(e => e.Hands)
+                .WithOne(e => e.ApplicationUser)
+                .HasForeignKey(e => e.ApplicationUserId)
+                .IsRequired();
+
+            modelBuilder
+                .Entity<ApplicationUser>()
+                .HasMany(e => e.StripeSubscriptions)
                 .WithOne(e => e.ApplicationUser)
                 .HasForeignKey(e => e.ApplicationUserId)
                 .IsRequired();
