@@ -10,20 +10,37 @@ namespace ai_poker_coach.Controllers
     [ApiController]
     public class StripeController : ControllerBase
     {
+        private readonly string _stripeApiKey;
         private readonly string _stripeWebhookSecret;
-
         private readonly IdentityDataContext _dbContext;
 
         public StripeController(IdentityDataContext dbContext)
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            _stripeWebhookSecret =
-                environment == "Development"
-                    ? Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_LOCAL")
-                        ?? "Could not load local Stripe webhook secret"
-                    : Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_PRODUCTION")
-                        ?? "Could not load production Stripe webhook secret";
             _dbContext = dbContext;
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            if (environment == "Development")
+            {
+                _stripeApiKey = Environment.GetEnvironmentVariable("STRIPE_API_KEY_TEST") ?? "";
+                _stripeWebhookSecret = Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_TEST") ?? "";
+            }
+            else
+            {
+                _stripeApiKey = Environment.GetEnvironmentVariable("STRIPE_API_KEY_PRODUCTION") ?? "";
+                _stripeWebhookSecret = Environment.GetEnvironmentVariable("STRIPE_WEBHOOK_SECRET_PRODUCTION") ?? "";
+            }
+
+            if (string.IsNullOrEmpty(_stripeApiKey))
+            {
+                throw new Exception("Stripe API key is not set in: " + environment);
+            }
+
+            if (string.IsNullOrEmpty(_stripeWebhookSecret))
+            {
+                throw new Exception("Stripe webhook secret is not set in: " + environment);
+            }
+
+            StripeConfiguration.ApiKey = _stripeApiKey;
         }
 
         [HttpPost]
@@ -67,24 +84,40 @@ namespace ai_poker_coach.Controllers
                             if (user != null)
                             {
                                 var stripeSubscription = new StripeSubscription(user, newSubscription);
-
                                 await _dbContext.StripeSubscriptions.AddAsync(stripeSubscription);
                                 await _dbContext.SaveChangesAsync();
-                                Console.WriteLine($"Added new StripeSubscription: {stripeSubscription.Id}");
                             }
                             else
                             {
-                                Console.WriteLine(
-                                    $"User not found for Stripe Customer ID: {newSubscription.CustomerId}"
+                                throw new Exception(
+                                    $"Create StripeSubscription failed: User not found for Stripe Customer ID: {newSubscription.CustomerId}"
                                 );
                             }
                         }
                         break;
 
                     case Events.CustomerSubscriptionUpdated:
-                        var updatedSubscription = stripeEvent.Data.Object as Subscription;
-                        Console.WriteLine("updatedSubscription: " + updatedSubscription);
-                        // Handle subscription update logic
+                        if (stripeEvent.Data.Object is Subscription updatedSubscription)
+                        {
+                            Console.WriteLine("updatedSubscription: " + updatedSubscription);
+                            var stripeSubscription = await _dbContext.StripeSubscriptions.FirstOrDefaultAsync(s =>
+                                s.SubscriptionId == updatedSubscription.Id
+                            );
+                            if (stripeSubscription != null)
+                            {
+                                stripeSubscription.Status = updatedSubscription.Status;
+                                stripeSubscription.PriceId = updatedSubscription.Items.Data[0].Price.Id;
+                                stripeSubscription.StartDate = updatedSubscription.StartDate;
+                                stripeSubscription.EndDate = updatedSubscription.EndedAt;
+                                await _dbContext.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                throw new Exception(
+                                    $"Update StripeSubscription failed: StripeSubscription not found for Subscription ID: {updatedSubscription.Id}"
+                                );
+                            }
+                        }
                         break;
 
                     case Events.CustomerSubscriptionDeleted:
@@ -94,7 +127,6 @@ namespace ai_poker_coach.Controllers
                         break;
 
                     default:
-                        // Handle other event types
                         break;
                 }
 
@@ -102,6 +134,7 @@ namespace ai_poker_coach.Controllers
             }
             catch (StripeException e)
             {
+                Console.WriteLine("StripeException: " + e.Message);
                 return BadRequest(e.Message);
             }
         }
